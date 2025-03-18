@@ -24,7 +24,6 @@ closest_to_center <- function(row, closest) {
 }
 
 
-# TEST
 #' @title Run compensAID tool; automated detection of compensation issues
 #'
 #' @param path.QC (character): FlowFrame containing the expression matrix, channel names, and marker names.
