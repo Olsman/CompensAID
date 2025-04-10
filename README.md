@@ -1,4 +1,4 @@
-compensaID: An automated detection tool for spillover errors.
+compensAID: An automated detection tool for spillover errors.
 
 
 Overview
