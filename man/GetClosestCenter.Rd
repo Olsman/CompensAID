@@ -19,20 +19,20 @@ Identify value closest to visual estimation
 }
 \examples{
 # Import FCS file
-file <- flowCore::read.FCS("path/to/exampleFCS.fcs")
+file <- flowCore::read.FCS(system.file("extdata", "250410.fcs", package = "compensAID"))
 primary.channel <- "PE-Cy7-A"
 
 # Density-based cut-off detection of a single channel.
-density.detection <- flowDensity::deGate(file, 
-                                         channel = primary.channel, 
-                                         verbose = FALSE, 
-                                         all.cuts = TRUE, 
+density.detection <- flowDensity::deGate(file,
+                                         channel = primary.channel,
+                                         verbose = FALSE,
+                                         all.cuts = TRUE,
                                          upper = TRUE)
-                               
+
 # Identify cut-off closest to visual estimation
 center.plot <- 2
-cut.off <- GetClosestCenter(density.detection, 
-                            closest = center.plot)                                
+cut.off <- GetClosestCenter(density.detection,
+                            closest = center.plot)
 
 }
 \seealso{

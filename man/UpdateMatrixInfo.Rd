@@ -40,7 +40,7 @@ Calculate segment information
 }
 \examples{
 # Import FCS file
-file <- flowCore::read.FCS("path/to/exampleFCS.fcs")
+file <- flowCore::read.FCS(system.file("extdata", "250410.fcs", package = "compensAID"))
 
 # Marker names
 primary.marker <- "CD19"
@@ -52,33 +52,39 @@ cs <- "APC-H7-A"
 
 # Density-based cut-off detection
 center.plot <- 2
-co <- DensityGating(og = file, 
+co <- DensityGating(og = file,
                     cp.value = center.plot)
+
+# Get combinations
+mc <- GetMarkerCombinations(og = file)
 
 # Parameter for the distance between the primary positive and negative population
 separation.distance <- 0.25
 
 # Obtain empty SSI matrix information
 range.value <- 4
-si <- EmptyMatrixInfo(og = file, 
-                      rv.input = range.value, 
-                      mc.input = mc, co.input = co, sd.input = separation.distance)
-
-# Obtain populations
-pop <- GetPopulations(og = file, 
-                      primary = primary.marker, 
-                      secondary = secondary.marker, 
-                      co.input = co, 
+si <- EmptyMatrixInfo(og = file,
+                      rv.input = range.value,
+                      mc.input = mc,
+                      co.input = co,
                       sd.input = separation.distance)
 
-# Select primary positive population                      
+# Obtain populations
+pop <- GetPopulations(og = file,
+                      primary = primary.marker,
+                      secondary = secondary.marker,
+                      co.input = co,
+                      sd.input = separation.distance)
+
+# Select primary positive population
 population.positive <- pop$primary.positive
 
 # Get the events that fall within the fourth segment
 segment.value <- 4
-range.value <- (max(population.positive[, cp]) - min(population.positive[, cp])/segment.value                       
+range.value <- (max(population.positive[, cp]) - min(population.positive[, cp]))/segment.value
 
-# Adjust the SSI information if there are more than 20 events in the (segmented) positive population (output = "PASS")
+# Adjust the SSI info if there are >20 events in the (segmented) positive population
+# (output = "PASS"); meaning more events present than threshold
 si <- UpdateMatrixInfo(si.input = si,
                        rv.input = segment.value,
                        range.input = range.value,
@@ -86,7 +92,7 @@ si <- UpdateMatrixInfo(si.input = si,
                        secondary = secondary.marker,
                        output = "PASS",
                        population = pop)
-           
+
 }
 \seealso{
 \code{\link{CompensAID}}, \code{\link{DensityGating}}, \code{\link{EmptyMatrixInfo}}, \code{\link{GetPopulations}}

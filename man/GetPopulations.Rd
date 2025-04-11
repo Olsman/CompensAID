@@ -25,7 +25,7 @@ Obtain (segmented) populations
 }
 \examples{
 # Import FCS file
-file <- flowCore::read.FCS("path/to/exampleFCS.fcs")
+file <- flowCore::read.FCS(system.file("extdata", "250410.fcs", package = "compensAID"))
 
 # Marker names
 primary.marker <- "CD19"

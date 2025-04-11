@@ -12,7 +12,7 @@
 #'
 #' @examples
 #' # Import FCS file
-#' file <- flowCore::read.FCS("path/to/exampleFCS.fcs")
+#' file <- flowCore::read.FCS(system.file("extdata", "250410.fcs", package = "compensAID"))
 #'
 #' # Parameter for the number of segments
 #' range.value <- 4
@@ -45,7 +45,7 @@ EmptyMatrixInfo <- function(og = ff,
 
 
   # Input validation -----------------------------------------------------------
-  checkmate::assert(is(og, "flowFrame"), "Object is not a flowFrame.")
+  checkmate::assert(methods::is(og, "flowFrame"), "Object is not a flowFrame.")
   checkmate::checkNumeric(rv.input)
   checkmate::checkDataFrame(mc.input)
   checkmate::checkDataFrame(co.input)
@@ -82,7 +82,7 @@ EmptyMatrixInfo <- function(og = ff,
                   secondary.cutoff.adjusted = NA,
                   secondary.perc.before = NA,
                   secondary.perc.after = NA) %>%
-  dplyr::slice(rep(1:n(), each = rv.input)) %>%
+    dplyr::slice(rep(1:nrow(.), each = rv.input)) %>%
     dplyr::group_by(primary.marker, secondary.marker) %>%
     dplyr::mutate(segment = rep(1:rv.input)) %>%
     dplyr::select(file, primary.marker, primary.channel, pretty.primary, secondary.marker, secondary.channel, pretty.secondary,

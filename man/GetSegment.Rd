@@ -31,7 +31,7 @@ Calculate segment information
 }
 \examples{
 # Import FCS file
-file <- flowCore::read.FCS("path/to/exampleFCS.fcs")
+file <- flowCore::read.FCS(system.file("extdata", "250410.fcs", package = "compensAID"))
 
 # Marker names
 primary.marker <- "CD19"
@@ -43,29 +43,29 @@ cs <- "APC-H7-A"
 
 # Density-based cut-off detection
 center.plot <- 2
-co <- DensityGating(og = file, 
+co <- DensityGating(og = file,
                     cp.value = center.plot)
 
 # Parameter for the distance between the primary positive and negative population
 separation.distance <- 0.25
 
 # Obtain populations
-pop <- GetPopulations(og = file, 
-                      primary = primary.marker, 
-                      secondary = secondary.marker, 
-                      co.input = co, 
+pop <- GetPopulations(og = file,
+                      primary = primary.marker,
+                      secondary = secondary.marker,
+                      co.input = co,
                       sd.input = separation.distance)
 
-# Select primary positive population                      
+# Select primary positive population
 population.positive <- pop$primary.positive
 
 # Get the events that fall within the fourth segment
 segment.value <- 4
-range.value <- (max(population.positive[, cp]) - min(population.positive[, cp])/segment.value                       
-info <- GetSegment(population = population.positive, 
-                   primary.channel = cp, 
-                   secondary.channel = cs, 
-                   segment = segment.value, 
+range.value <- (max(population.positive[, cp]) - min(population.positive[, cp]))/segment.value
+info <- GetSegment(population = population.positive,
+                   primary.channel = cp,
+                   secondary.channel = cs,
+                   segment = segment.value,
                    range.input = range.value)
 }
 \seealso{

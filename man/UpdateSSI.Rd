@@ -25,7 +25,7 @@ Update Secondary Stain Index
 }
 \examples{
 # Import FCS file
-file <- flowCore::read.FCS("path/to/exampleFCS.fcs")
+file <- flowCore::read.FCS(system.file("extdata", "250410.fcs", package = "compensAID"))
 
 # Parameter for the number of segments
 range.value <- 4
@@ -59,10 +59,24 @@ pop <- GetPopulations(og = file,
                       co.input = co,
                       sd.input = separation.distance)
 
+#' # Channel names
+cp <- "PE-Cy7-A"
+cs <- "APC-H7-A"
+
+# Update matrix information
+range <- (max(pop$primary.positive[, cp]) - min(pop$primary.positive[, cp]))/range.value
+si <- UpdateMatrixInfo(si.input = si,
+                       rv.input = range.value,
+                       range.input = range,
+                       primary = primary.marker,
+                       secondary = secondary.marker,
+                       output = "PASS",
+                       population = pop)
+
 # Calculate SSI for the last segment
 si <- UpdateSSI(si.input = si,
                 rv.input = range.value,
-                primary = primary.marker
+                primary = primary.marker,
                 secondary = secondary.marker,
                 population = pop)
 

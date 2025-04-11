@@ -2,7 +2,7 @@
 % Please edit documentation in R/WithinLimit.R
 \name{WithinLimit}
 \alias{WithinLimit}
-\title{Calculate Secondary Stain Index}
+\title{Detect if smaller peaks need included for density-based cut-off detection.}
 \usage{
 WithinLimit(
   population,
@@ -17,23 +17,33 @@ WithinLimit(
 )
 }
 \arguments{
-\item{si.input}{(dataFrame): DataFrame containing the SSI info.}
+\item{population}{(list) List with the negative population of the primary and secondary marker, and positive population of the primary marker.}
 
-\item{primary.channel}{(character): Name of the primary channel.}
+\item{og}{(FlowFrame): FlowFrame containing the expression matrix, channel names, and marker names.}
 
-\item{secondary.channel}{(character): Name of the secondary channel.}
+\item{primary}{(character): Name of the primary channel.}
 
-\item{segment}{(numerical): Numerical value determining for which segment the SSI should be calculated.}
+\item{secondary}{(character): Name of the secondary channel.}
+
+\item{min}{(numerical): Minimum percentage of events required.}
+
+\item{max}{(numerical): Maximum percentage of events required.}
+
+\item{si.input}{(dataFrame): dataFrame containing SSI info.}
+
+\item{sd.input}{(numerical): Numerical value determining the distance between the primary negative and positive population.}
+
+\item{co.input}{(dataFrame) dataFrame with the output of the density-based cut-off detection.}
 }
 \value{
-(numerical) Returns the Secondary Stain Index score.
+(list) Returns a list with the adjusted cutoffs and update secondary stain index information dataFrame.
 }
 \description{
-Calculate Secondary Stain Index
+Detect if smaller peaks need included for density-based cut-off detection.
 }
 \examples{
 # Import FCS file
-file <- flowCore::read.FCS("path/to/exampleFCS.fcs")
+file <- flowCore::read.FCS(system.file("extdata", "250410.fcs", package = "compensAID"))
 
 # Obtain all possible marker combinations
 mc <- GetMarkerCombinations(og = file)

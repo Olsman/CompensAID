@@ -8,7 +8,7 @@
 #'
 #' @examples
 #' # Import FCS file
-#' file <- flowCore::read.FCS("path/to/exampleFCS.fcs")
+#' file <- flowCore::read.FCS(system.file("extdata", "250410.fcs", package = "compensAID"))
 #'
 #' # Get combinations
 #' mc <- GetMarkerCombinations(og = file)
@@ -19,14 +19,14 @@ GetMarkerCombinations <- function(og) {
 
 
   # Input validation -----------------------------------------------------------
-  checkmate::assert(is(og, "flowFrame"), "Object is not a flowFrame.")
+  checkmate::assert(methods::is(og, "flowFrame"), "Object is not a flowFrame.")
 
 
   # Get all possible marker combinations ---------------------------------------
   m <- expand.grid("primary.marker" = flowCore::markernames(og),
                    "secondary.marker" = flowCore::markernames(og)) %>%
     dplyr::filter(!primary.marker == secondary.marker) %>%
-    lapply(., function(x) type.convert(as.character(x), as.is = TRUE)) %>%
+    lapply(., function(x) utils::type.convert(as.character(x), as.is = TRUE)) %>%
     as.data.frame()
 
 

@@ -1,17 +1,22 @@
-#' @title Calculate Secondary Stain Index
+#' @title Detect if smaller peaks need included for density-based cut-off detection.
 #'
-#' @param si.input (dataFrame): DataFrame containing the SSI info.
-#' @param primary.channel (character): Name of the primary channel.
-#' @param secondary.channel (character): Name of the secondary channel.
-#' @param segment (numerical): Numerical value determining for which segment the SSI should be calculated.
+#' @param population (list) List with the negative population of the primary and secondary marker, and positive population of the primary marker.
+#' @param og (FlowFrame): FlowFrame containing the expression matrix, channel names, and marker names.
+#' @param primary (character): Name of the primary channel.
+#' @param secondary (character): Name of the secondary channel.
+#' @param min (numerical): Minimum percentage of events required.
+#' @param max (numerical): Maximum percentage of events required.
+#' @param si.input (dataFrame): dataFrame containing SSI info.
+#' @param co.input (dataFrame) dataFrame with the output of the density-based cut-off detection.
+#' @param sd.input (numerical): Numerical value determining the distance between the primary negative and positive population.
 #'
-#' @return (numerical) Returns the Secondary Stain Index score.
+#' @return (list) Returns a list with the adjusted cutoffs and update secondary stain index information dataFrame.
 #'
 #' @seealso \code{\link{CompensAID}}, \code{\link{EmptyMatrixInfo}}, \code{\link{DensityGating}}
 #'
 #' @examples
 #' # Import FCS file
-#' file <- flowCore::read.FCS("path/to/exampleFCS.fcs")
+#' file <- flowCore::read.FCS(system.file("extdata", "250410.fcs", package = "compensAID"))
 #'
 #' # Obtain all possible marker combinations
 #' mc <- GetMarkerCombinations(og = file)
@@ -58,7 +63,7 @@ WithinLimit <- function(population, og, primary, secondary, min = 10, max = 90, 
 
   # Input validation -----------------------------------------------------------
   checkmate::checkList(population)
-  checkmate::assert(is(og, "flowFrame"), "Object is not a flowFrame.")
+  checkmate::assert(methods::is(og, "flowFrame"), "Object is not a flowFrame.")
   checkmate::checkCharacter(primary)
   checkmate::checkCharacter(secondary)
   checkmate::checkNumeric(min)
@@ -86,7 +91,7 @@ WithinLimit <- function(population, og, primary, secondary, min = 10, max = 90, 
     co.input$opt[co.input$channel == cs] <- GetClosestCenter(co.adjust, 2)
 
     # Obtain populations with new cut-off
-    pop <- GetPopulations(og = ff,
+    pop <- GetPopulations(og = og,
                           primary = primary,
                           secondary = secondary,
                           co.input = co.input,

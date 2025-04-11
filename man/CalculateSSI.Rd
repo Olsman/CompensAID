@@ -23,7 +23,7 @@ Calculate Secondary Stain Index
 }
 \examples{
 # Import FCS file
-file <- flowCore::read.FCS("path/to/exampleFCS.fcs")
+file <- flowCore::read.FCS(system.file("extdata", "250410.fcs", package = "compensAID"))
 
 # Parameter for the number of segments
 range.value <- 4
@@ -33,7 +33,8 @@ center.plot <- 2
 co <- DensityGating(og = file,
                     cp.value = center.plot)
 
-# All possible marker combinations
+# Get combinations
+mc <- GetMarkerCombinations(og = file)
 
 # Parameter for the distance between the primary positve and negative population
 separation.distance <- 0.25
@@ -52,8 +53,8 @@ cs <- "APC-H7-A"
 # Calculate SSI for the last segment
 CalculateSSI(si.input = si,
              primary.channel = cp,
-             secondary.channel = cs
-             secondary,segment = range.value)
+             secondary.channel = cs,
+             segment = range.value)
 
 }
 \seealso{

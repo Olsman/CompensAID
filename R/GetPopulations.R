@@ -12,7 +12,7 @@
 #'
 #' @examples
 #' # Import FCS file
-#' file <- flowCore::read.FCS("path/to/exampleFCS.fcs")
+#' file <- flowCore::read.FCS(system.file("extdata", "250410.fcs", package = "compensAID"))
 #'
 #' # Marker names
 #' primary.marker <- "CD19"
@@ -37,7 +37,7 @@
 GetPopulations <- function(og, primary, secondary, co.input, sd.input) {
 
   # Input validation -----------------------------------------------------------
-  checkmate::assert(is(og, "flowFrame"), "Object is not a flowFrame.")
+  checkmate::assert(methods::is(og, "flowFrame"), "Object is not a flowFrame.")
   checkmate::checkCharacter(primary)
   checkmate::checkCharacter(secondary)
   checkmate::checkDataFrame(co.input)

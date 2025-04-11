@@ -21,7 +21,7 @@ Assess event requirement
 }
 \examples{
 # Import FCS file
-file <- flowCore::read.FCS("path/to/exampleFCS.fcs")
+file <- flowCore::read.FCS(system.file("extdata", "250410.fcs", package = "compensAID"))
 
 # Marker names
 primary.marker <- "CD19"
@@ -29,9 +29,9 @@ secondary.marker <- "IgL"
 
 # Obtain density-based cut-off detection
 center.plot <- 2
-co <- DensityGating(og = file, 
+co <- DensityGating(og = file,
                     cp.value = center.plot)
-              
+
 # Obtain populations
 separation.distance <- 0.25
 pop <- GetPopulations(og = file,
@@ -39,16 +39,16 @@ pop <- GetPopulations(og = file,
                       secondary = secondary.marker,
                       co.input = co,
                       sd.input = separation.distance)
-                      
-# Select populations                       
+
+# Select populations
 primary.negative <- pop$primary.negative
 primary.positive <- pop$primary.positive
 
 # Assess event requirement
 events.value <- 20
-EventRequirement(primary.negative, primary.positive, events.value))
+EventRequirement(primary.negative, primary.positive, events.value)
 
 }
 \seealso{
-\code{\link{CompensAID}, \link{GetPopulations}, \link{}}
+\code{\link{CompensAID}, \link{GetPopulations}, \link{DensityGating}}
 }
