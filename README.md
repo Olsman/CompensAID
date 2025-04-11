@@ -17,7 +17,7 @@ Key Features
 
 Installation
 ------------
-devtools::install_github("olsman/compensAID")
+devtools::install_github("Olsman/compensAID")
 
 
 Citation
