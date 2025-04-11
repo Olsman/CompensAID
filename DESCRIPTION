@@ -2,8 +2,8 @@ Package: compensAID
 Type: Package
 Title: Automated detection tool for spillover errors
 Version: 0.1.0
-Authors: c(person("Rosan", "Olsman", role = c("aut", "cre"),
-           email = "r.olsman@erasmusmc.nl"),
+Authors@R: c(person("Rosan", "Olsman", role = c("aut", "cre"),
+            email = "r.olsman@erasmusmc.nl"),
             person("Sarah", "Bonte", role = c("aut"),
             email = "sarahm.bonte@ugent.be"),
             person("Mattias", "Hofmans", role = c("aut"),
@@ -17,12 +17,23 @@ Authors: c(person("Rosan", "Olsman", role = c("aut", "cre"),
             person("Vincent", "van der Velden", role = "aut", 
             email="v.h.j.vandervelden@erasmusmc.nl"),
             person("Sofie", "Van Gassen", role = "aut", 
-            email="sofie.vangassen@ugent.be"),)
-Maintainer: person("Rosan", "Olsman",
-            role = c("aut", "cre"),
-            email = "r.olsman@erasmusmc.nl")
+            email="sofie.vangassen@ugent.be"))
+Maintainer: Rosan Olsman <r.olsman@erasmusmc.nl>
 Description: The compensAID tool automatically calculates the secondary stain index for an automated detection of spillover errors.
 License: GPL (>= 3)
 Encoding: UTF-8
 LazyData: true
 RoxygenNote: 7.3.2
+Imports: 
+    checkmate,
+    dplyr,
+    flowCore,
+    flowDensity,
+    magrittr,
+    methods,
+    ParallelLogger,
+    stats,
+    tibble,
+    tidyr,
+    tidyselect,
+    utils
