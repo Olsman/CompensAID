@@ -73,7 +73,7 @@ WithinLimit <- function(population, og, primary, secondary, min = 10, max = 90, 
   checkmate::checkDataFrame(co.input)
 
   # Obtain percentages
-  percentage <- round((nrow(population[["secondary.negative"]])*100)/nrow(og), 2)
+  percentage <- round((nrow(population[["secondary.negative"]])*100)/nrow(og))
   si.input$secondary.perc.before[si.input$primary.marker == primary & si.input$secondary.marker == secondary] <- percentage
 
   # Get channel names
@@ -82,7 +82,7 @@ WithinLimit <- function(population, og, primary, secondary, min = 10, max = 90, 
 
 
   # Adjust density-based cut-off detection parameters --------------------------
-  if (percentage < min | percentage > max) {
+  if (percentage <= min | percentage >= max) {
 
     # Perform density-based cut-off detection
     co.adjust <- flowDensity::deGate(og, channel = cs, all.cuts = TRUE, tinypeak.removal = 0.0001, verbose = FALSE, upper = TRUE)
@@ -98,7 +98,7 @@ WithinLimit <- function(population, og, primary, secondary, min = 10, max = 90, 
                           sd.input = sd.input)
 
     # Obtain percentages
-    percentage <- round((nrow(pop[["secondary.negative"]])*100)/nrow(og), 2)
+    percentage <- round((nrow(pop[["secondary.negative"]])*100)/nrow(og))
     si.input$secondary.perc.after[si.input$primary.marker == primary & si.input$secondary.marker == secondary] <- percentage
 
     # Adjust information

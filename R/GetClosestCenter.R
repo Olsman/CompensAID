@@ -34,11 +34,19 @@ GetClosestCenter <- function(row, closest) {
   checkmate::checkNumeric(closest)
 
 
+  # Remove NAs from the array --------------------------------------------------
+  valid.index <- which(!is.na(row))
+  valid.row <- row[valid.index]
+
+
   # Identify the index of the estimations closest to the visual estimation -----
   distances <- abs(row - closest)
   closest <- which.min(distances)
 
+  # Get index
+  index <- valid.index[closest]
+
 
   # Generate output ------------------------------------------------------------
-  return(row[closest])
+  return(row[index])
 }

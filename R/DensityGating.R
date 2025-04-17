@@ -34,7 +34,6 @@ DensityGating <- function(og, cp.value) {
   # Alter format
   d <- dplyr::bind_rows(d) %>%
     tidyr::unnest_wider(cutoffs, names_sep = "_") %>%
-    dplyr::mutate(dplyr::across(tidyselect::everything(), ~replace(., is.na(.), 0))) %>%
     as.data.frame()
 
 
