@@ -23,7 +23,7 @@ Calculate Secondary Stain Index
 }
 \examples{
 # Import FCS file
-file <- flowCore::read.FCS(system.file("extdata", "250410.fcs", package = "compensAID"))
+file <- flowCore::read.FCS(system.file("extdata", "68983.fcs", package = "compensAID"))
 
 # Parameter for the number of segments
 range.value <- 4
@@ -47,8 +47,8 @@ si <- EmptyMatrixInfo(og = file,
                       sd.input = separation.distance)
 
 # Channel names
-cp <- "PE-Cy7-A"
-cs <- "APC-H7-A"
+cp <- "PE-Cy5-A"
+cs <- "PE-Cy7-A"
 
 # Calculate SSI for the last segment
 CalculateSSI(si.input = si,

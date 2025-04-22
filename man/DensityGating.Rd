@@ -19,7 +19,7 @@ Perform density-based cut-off detection
 }
 \examples{
 # Import FCS file
-file <- flowCore::read.FCS(system.file("extdata", "250410.fcs", package = "compensAID"))
+file <- flowCore::read.FCS(system.file("extdata", "68983.fcs", package = "compensAID"))
 
 # Perform density-based cut-off detection
 center.plot <- 2

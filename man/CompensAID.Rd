@@ -4,7 +4,13 @@
 \alias{CompensAID}
 \title{Run compensAID tool; automated detection of compensation issues}
 \usage{
-CompensAID(ff, range.value, events.value, center.plot, separation.distance)
+CompensAID(
+  ff,
+  range.value = 4,
+  events.value = 20,
+  center.plot = 2,
+  separation.distance = 0.25
+)
 }
 \arguments{
 \item{ff}{(FlowFrame): FlowFrame containing the expression matrix, channel names, and marker names.}
@@ -25,7 +31,7 @@ Run compensAID tool; automated detection of compensation issues
 }
 \examples{
 # Import FCS file
-file <- flowCore::read.FCS(system.file("extdata", "250410.fcs", package = "compensAID"))
+file <- flowCore::read.FCS(system.file("extdata", "68983.fcs", package = "compensAID"))
 
 # Run compensAID tool
 segments <- 4

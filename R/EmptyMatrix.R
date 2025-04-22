@@ -8,7 +8,7 @@
 #'
 #' @examples
 #' # Import FCS file
-#' file <- flowCore::read.FCS(system.file("extdata", "250410.fcs", package = "compensAID"))
+#' file <- flowCore::read.FCS(system.file("extdata", "68983.fcs", package = "compensAID"))
 #'
 #' # Empty matrix
 #' sm <- EmptyMatrix(og = file)

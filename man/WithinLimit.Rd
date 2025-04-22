@@ -43,7 +43,7 @@ Detect if smaller peaks need included for density-based cut-off detection.
 }
 \examples{
 # Import FCS file
-file <- flowCore::read.FCS(system.file("extdata", "250410.fcs", package = "compensAID"))
+file <- flowCore::read.FCS(system.file("extdata", "68983.fcs", package = "compensAID"))
 
 # Obtain all possible marker combinations
 mc <- GetMarkerCombinations(og = file)
@@ -65,7 +65,7 @@ si <- EmptyMatrixInfo(og = file,
 
 # Gating positive and negative population
 primary.marker <- "CD19"
-secondary.marker <- "IgL"
+secondary.marker <- "CD3"
 pop <- GetPopulations(og = file,
                       primary = primary.marker,
                       secondary = secondary.marker,

@@ -29,11 +29,12 @@ Imports:
     dplyr,
     flowCore,
     flowDensity,
+    ggplot2,
     magrittr,
     methods,
     ParallelLogger,
+    reshape2,
     stats,
     tibble,
     tidyr,
-    tidyselect,
     utils

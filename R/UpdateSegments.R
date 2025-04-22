@@ -12,15 +12,15 @@
 #'
 #' @examples
 #' # Import FCS file
-#' file <- flowCore::read.FCS(system.file("extdata", "250410.fcs", package = "compensAID"))
+#' file <- flowCore::read.FCS(system.file("extdata", "68983.fcs", package = "compensAID"))
 #'
 #' # Marker names
 #' primary.marker <- "CD19"
-#' secondary.marker <- "IgL"
+#' secondary.marker <- "CD3"
 #'
 #' # Channel names
-#' cp <- "PE-Cy7-A"
-#' cs <- "APC-H7-A"
+#' cp <- "PE-Cy5-A"
+#' cs <- "PE-Cy7-A"
 #'
 #' # Density-based cut-off detection
 #' center.plot <- 2
@@ -256,6 +256,150 @@ UpdateSegments <- function(si.input, primary, secondary, ev.input, rv.input) {
                                                                si.input$event.count[si.input$primary.marker == primary &
                                                                                     si.input$secondary.marker == secondary &
                                                                                     si.input$segment == s-3])
+    }
+
+    # Combine more segments if the merge was not enough ------------------------
+    if (si.input$event.count.merge[si.input$primary.marker == primary &
+                                   si.input$secondary.marker == secondary &
+                                   si.input$segment == s] < ev.input & s != 2) {
+
+      # Adjust segment ranges
+      si.input$segment.min[si.input$primary.marker == primary &
+                           si.input$secondary.marker == secondary &
+                           si.input$segment == s &
+                           si.input$event.count < ev.input] <- si.input$segment.min[si.input$primary.marker == primary &
+                                                                                    si.input$secondary.marker == secondary &
+                                                                                    si.input$segment == s-4]
+
+      # Adjust other information
+      si.input[si.input$primary.marker == primary &
+               si.input$secondary.marker == secondary &
+               si.input$segment == s-4,
+               c("mfi.neg", "sd.neg", "mfi.pos", "ssi")] <- NA
+
+      # Adjust other information
+      si.input[si.input$primary.marker == primary &
+               si.input$secondary.marker == secondary &
+               si.input$segment == s-4,
+               c("message")] <- "Combined with next segment"
+
+      # Calculate number of events
+      si.input$event.count.merge[si.input$primary.marker == primary &
+                                 si.input$secondary.marker == secondary &
+                                 si.input$segment == s] <- sum(si.input$event.count[si.input$primary.marker == primary &
+                                                                                    si.input$secondary.marker == secondary &
+                                                                                    si.input$segment == s],
+                                                                   si.input$event.count[si.input$primary.marker == primary &
+                                                                                        si.input$secondary.marker == secondary &
+                                                                                        si.input$segment == s-1],
+                                                                   si.input$event.count[si.input$primary.marker == primary &
+                                                                                        si.input$secondary.marker == secondary &
+                                                                                        si.input$segment == s-2],
+                                                                   si.input$event.count[si.input$primary.marker == primary &
+                                                                                        si.input$secondary.marker == secondary &
+                                                                                        si.input$segment == s-3],
+                                                                   si.input$event.count[si.input$primary.marker == primary &
+                                                                                        si.input$secondary.marker == secondary &
+                                                                                        si.input$segment == s-4])
+    }
+
+    # Combine more segments if the merge was not enough ------------------------
+    if (si.input$event.count.merge[si.input$primary.marker == primary &
+                                   si.input$secondary.marker == secondary &
+                                   si.input$segment == s] < ev.input & s != 2) {
+
+    # Adjust segment ranges
+    si.input$segment.min[si.input$primary.marker == primary &
+                         si.input$secondary.marker == secondary &
+                         si.input$segment == s &
+                         si.input$event.count < ev.input] <- si.input$segment.min[si.input$primary.marker == primary &
+                                                                                  si.input$secondary.marker == secondary &
+                                                                                  si.input$segment == s-5]
+
+    # Adjust other information
+    si.input[si.input$primary.marker == primary &
+             si.input$secondary.marker == secondary &
+             si.input$segment == s-5,
+             c("mfi.neg", "sd.neg", "mfi.pos", "ssi")] <- NA
+
+    # Adjust other information
+    si.input[si.input$primary.marker == primary &
+             si.input$secondary.marker == secondary &
+             si.input$segment == s-5,
+             c("message")] <- "Combined with next segment"
+
+    # Calculate number of events
+    si.input$event.count.merge[si.input$primary.marker == primary &
+                               si.input$secondary.marker == secondary &
+                               si.input$segment == s] <- sum(si.input$event.count[si.input$primary.marker == primary &
+                                                                                  si.input$secondary.marker == secondary &
+                                                                                  si.input$segment == s],
+                                                             si.input$event.count[si.input$primary.marker == primary &
+                                                                                  si.input$secondary.marker == secondary &
+                                                                                  si.input$segment == s-1],
+                                                             si.input$event.count[si.input$primary.marker == primary &
+                                                                                  si.input$secondary.marker == secondary &
+                                                                                  si.input$segment == s-2],
+                                                             si.input$event.count[si.input$primary.marker == primary &
+                                                                                  si.input$secondary.marker == secondary &
+                                                                                  si.input$segment == s-3],
+                                                             si.input$event.count[si.input$primary.marker == primary &
+                                                                                  si.input$secondary.marker == secondary &
+                                                                                  si.input$segment == s-4],
+                                                             si.input$event.count[si.input$primary.marker == primary &
+                                                                                  si.input$secondary.marker == secondary &
+                                                                                  si.input$segment == s-5])
+    }
+
+    # Combine more segments if the merge was not enough ------------------------
+    if (si.input$event.count.merge[si.input$primary.marker == primary &
+                                   si.input$secondary.marker == secondary &
+                                   si.input$segment == s] < ev.input & s != 2) {
+
+    # Adjust segment ranges
+    si.input$segment.min[si.input$primary.marker == primary &
+                         si.input$secondary.marker == secondary &
+                         si.input$segment == s &
+                         si.input$event.count < ev.input] <- si.input$segment.min[si.input$primary.marker == primary &
+                                                                                  si.input$secondary.marker == secondary &
+                                                                                  si.input$segment == s-6]
+
+    # Adjust other information
+    si.input[si.input$primary.marker == primary &
+             si.input$secondary.marker == secondary &
+             si.input$segment == s-6,
+                 c("mfi.neg", "sd.neg", "mfi.pos", "ssi")] <- NA
+
+    # Adjust other information
+    si.input[si.input$primary.marker == primary &
+             si.input$secondary.marker == secondary &
+             si.input$segment == s-6,
+             c("message")] <- "Combined with next segment"
+
+    # Calculate number of events
+    si.input$event.count.merge[si.input$primary.marker == primary &
+                               si.input$secondary.marker == secondary &
+                               si.input$segment == s] <- sum(si.input$event.count[si.input$primary.marker == primary &
+                                                                                  si.input$secondary.marker == secondary &
+                                                                                  si.input$segment == s],
+                                                             si.input$event.count[si.input$primary.marker == primary &
+                                                                                  si.input$secondary.marker == secondary &
+                                                                                  si.input$segment == s-1],
+                                                             si.input$event.count[si.input$primary.marker == primary &
+                                                                                  si.input$secondary.marker == secondary &
+                                                                                  si.input$segment == s-2],
+                                                             si.input$event.count[si.input$primary.marker == primary &
+                                                                                  si.input$secondary.marker == secondary &
+                                                                                  si.input$segment == s-3],
+                                                             si.input$event.count[si.input$primary.marker == primary &
+                                                                                  si.input$secondary.marker == secondary &
+                                                                                  si.input$segment == s-4],
+                                                             si.input$event.count[si.input$primary.marker == primary &
+                                                                                  si.input$secondary.marker == secondary &
+                                                                                  si.input$segment == s-5],
+                                                             si.input$event.count[si.input$primary.marker == primary &
+                                                                                  si.input$secondary.marker == secondary &
+                                                                                  si.input$segment == s-6])
       }
     }
 

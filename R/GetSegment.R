@@ -12,15 +12,15 @@
 #'
 #' @examples
 #' # Import FCS file
-#' file <- flowCore::read.FCS(system.file("extdata", "250410.fcs", package = "compensAID"))
+#' file <- flowCore::read.FCS(system.file("extdata", "68983.fcs", package = "compensAID"))
 #'
 #' # Marker names
 #' primary.marker <- "CD19"
-#' secondary.marker <- "IgL"
+#' secondary.marker <- "CD3"
 #'
 #' # Channel names
-#' cp <- "PE-Cy7-A"
-#' cs <- "APC-H7-A"
+#' cp <- "PE-Cy5-A"
+#' cs <- "PE-Cy7-A"
 #'
 #' # Density-based cut-off detection
 #' center.plot <- 2

@@ -12,7 +12,7 @@
 #'
 #' @examples
 #' # Import FCS file
-#' file <- flowCore::read.FCS(system.file("extdata", "250410.fcs", package = "compensAID"))
+#' file <- flowCore::read.FCS(system.file("extdata", "68983.fcs", package = "compensAID"))
 #'
 #' # Parameter for the number of segments
 #' range.value <- 4
@@ -37,7 +37,7 @@
 #'
 #' # Channel names
 #' primary.marker <- "CD19"
-#' secondary.marker <- "IgL"
+#' secondary.marker <- "CD3"
 #'
 #' # Get populations
 #' pop <- GetPopulations(og = file,
@@ -47,8 +47,8 @@
 #'                       sd.input = separation.distance)
 #'
 #' #' # Channel names
-#' cp <- "PE-Cy7-A"
-#' cs <- "APC-H7-A"
+#' cp <- "PE-Cy5-A"
+#' cs <- "PE-Cy7-A"
 #'
 #' # Update matrix information
 #' range <- (max(pop$primary.positive[, cp]) - min(pop$primary.positive[, cp]))/range.value

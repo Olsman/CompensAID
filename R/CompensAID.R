@@ -10,7 +10,7 @@
 #'
 #' @examples
 #' # Import FCS file
-#' file <- flowCore::read.FCS(system.file("extdata", "250410.fcs", package = "compensAID"))
+#' file <- flowCore::read.FCS(system.file("extdata", "68983.fcs", package = "compensAID"))
 #'
 #' # Run compensAID tool
 #' segments <- 4
@@ -25,7 +25,7 @@
 #'
 #' @export
 
-CompensAID <- function(ff, range.value, events.value, center.plot, separation.distance) {
+CompensAID <- function(ff, range.value = 4, events.value = 20, center.plot = 2, separation.distance = 0.25) {
 
 
   # Input validation -----------------------------------------------------------
