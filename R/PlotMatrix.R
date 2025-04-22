@@ -1,7 +1,6 @@
 #' @title Plot Secondary Stain Index matrix
 #'
 #' @param output.compensAID (matrix): Matrix containing the SSI output.
-#' @param sample (character): Name of sample.
 #' @param limit.min (numerical): Minimum SSI value shown in matrix.
 #' @param limit.max (numerical): Maximum SSI value shown in matrix.
 #'
@@ -25,17 +24,15 @@
 #'                              separation.distance = distance.populations)
 #'
 #' # Plot matrix
-#' figure <- PlotMatrix(output.compensAID = compensAID.res,
-#'                      sample = "68983.fcs")
+#' figure <- PlotMatrix(output.compensAID = compensAID.res)
 #'
 #' @export
 
-PlotMatrix <- function(output.compensAID, sample, limit.min = -3, limit.max = 3) {
+PlotMatrix <- function(output.compensAID, limit.min = -3, limit.max = 3) {
 
 
   # Input validation -----------------------------------------------------------
   checkmate::checkMatrix(output.compensAID)
-  checkmate::checkCharacter(sample)
   checkmate::checkNumeric(limit.min)
   checkmate::checkNumeric(limit.max)
 

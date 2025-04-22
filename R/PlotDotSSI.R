@@ -52,121 +52,130 @@ PlotDotSSI <- function(output.compensAID, og, primary, secondary, showScores = F
   extraInformation <- output.compensAID[["matrixInfo"]] %>%
     dplyr::filter(primary.marker == primary & secondary.marker == secondary)
 
+
   if(isFALSE(showScores)) {
 
+
+    # Visualize dot plot -------------------------------------------------------
     set.seed(20)
     p <- ggcyto::autoplot(og,
                           x = primary,
                           y = secondary,
                           bins = 100) +
-      guides(fill = "none")+
-      theme_minimal() +
-      xlab(extraInformation$pretty.primary[1]) +
-      ylab(extraInformation$pretty.secondary[1]) +
-      theme(legend.position = 'right',
-            legend.direction = 'horizontal',
-            text = element_text(size = 12, family = 'Helvetica', face = 'bold'),
-            panel.grid.minor = element_blank(),
-            panel.grid.major = element_blank(),
-            panel.border = element_rect(colour = "black", fill=NA, size=2),
-            axis.ticks.x = element_blank(),
-            axis.ticks.y = element_blank(),
-            strip.background = element_blank(),
-            strip.text = element_blank()) +
+      ggplot2::guides(fill = "none")+
+      ggplot2::theme_minimal() +
+      ggplot2::xlab(extraInformation$pretty.primary[1]) +
+      ggplot2::ylab(extraInformation$pretty.secondary[1]) +
+      ggplot2::theme(legend.position = 'right',
+                     legend.direction = 'horizontal',
+                     text = ggplot2::element_text(size = 12, family = 'Helvetica', face = 'bold'),
+                     panel.grid.minor = ggplot2::element_blank(),
+                     panel.grid.major = ggplot2::element_blank(),
+                     panel.border = ggplot2::element_rect(colour = "black", fill = NA, linewidth = 2),
+                     axis.ticks.x = ggplot2::element_blank(),
+                     axis.ticks.y = ggplot2::element_blank(),
+                     strip.background = ggplot2::element_blank(),
+                     strip.text = ggplot2::element_blank()) +
       ggplot2::theme(aspect.ratio=1)
     p <- ggcyto::as.ggplot(p)
+
 
   } else {
 
+
+    # Visualize dot plot -------------------------------------------------------
     set.seed(20)
     p <- ggcyto::autoplot(og,
                           x = primary,
                           y = secondary,
                           bins = 100) +
-      guides(fill = "none")+
-      theme_minimal() +
-      xlab(extraInformation$pretty.primary[1]) +
-      ylab(extraInformation$pretty.secondary[1]) +
-      theme(legend.position = 'right',
-            legend.direction = 'horizontal',
-            text = element_text(size = 12, family = 'Helvetica', face = 'bold'),
-            panel.grid.minor = element_blank(),
-            panel.grid.major = element_blank(),
-            panel.border = element_rect(colour = "black", fill=NA, size=2),
-            axis.ticks.x = element_blank(),
-            axis.ticks.y = element_blank(),
-            strip.background = element_blank(),
-            strip.text = element_blank()) +
+      ggplot2::guides(fill = "none") +
+      ggplot2::theme_minimal() +
+      ggplot2::xlab(extraInformation$pretty.primary[1]) +
+      ggplot2::ylab(extraInformation$pretty.secondary[1]) +
+      ggplot2::theme(legend.position = 'right',
+                     legend.direction = 'horizontal',
+                     text = ggplot2::element_text(size = 12, family = 'Helvetica', face = 'bold'),
+                     panel.grid.minor = ggplot2::element_blank(),
+                     panel.grid.major = ggplot2::element_blank(),
+                     panel.border = ggplot2::element_rect(colour = "black", fill = NA, linewidth = 2),
+                     axis.ticks.x = ggplot2::element_blank(),
+                     axis.ticks.y = ggplot2::element_blank(),
+                     strip.background = ggplot2::element_blank(),
+                     strip.text = ggplot2::element_blank()) +
       ggplot2::theme(aspect.ratio=1)
     p <- ggcyto::as.ggplot(p)
 
-    # add annotation: adjust gating because of bins
+    # Add annotation: adjust gating because of bins
     raw.annotation <- p$data %>%
       dplyr::select(extraInformation$primary.channel[1], extraInformation$secondary.channel[1]) %>%
-      dplyr::filter(!!sym(extraInformation$secondary.channel[1]) < extraInformation$secondary.cutoff[1])
+      dplyr::filter(!!rlang::sym(extraInformation$secondary.channel[1]) < extraInformation$secondary.cutoff[1])
 
-    min.neg <- min(raw.annotation[, extraInformation$primary.channel[1]])
-    max.pos <- max(raw.annotation[, extraInformation$primary.channel[1]])
+    min.neg <- raw.annotation %>% dplyr::select(extraInformation$primary.channel[1]) %>% min()
+    max.pos <- raw.annotation %>% dplyr::select(extraInformation$primary.channel[1]) %>% max()
 
-    min.sec <- min(raw.annotation[[extraInformation$primary.channel[2]]])
-    max.sec <- max(raw.annotation[[extraInformation$primary.channel[2]]])
+    min.sec <- raw.annotation %>% dplyr::select(extraInformation$secondary.channel[1]) %>% min()
+    max.sec <- raw.annotation %>% dplyr::select(extraInformation$secondary.channel[1]) %>% max()
 
-    # add annotation to figure
-    p <- p + ggplot2::annotate("rect",
-                               xmin = min.neg,
-                               xmax = extraInformation$primary.cutoff.neg[1],
-                               ymin = min.sec,
-                               ymax = max.sec)
-  }
+    range <- raw.annotation %>%
+      dplyr::filter(!!rlang::sym(extraInformation$primary.channel[1]) > extraInformation$primary.cutoff.pos[1]) %>%
+      dplyr::pull(extraInformation$primary.channel[1])
+
+    range.value <- (max(range)-min(range))/max(extraInformation$segment)
 
 
+    # Show scores --------------------------------------------------------------
+    # Visualize gating
+    p <- p +
+      ggplot2::annotate("rect",
+                        xmin = min.neg,
+                        xmax = extraInformation$primary.cutoff.neg[1],
+                        ymin = min.sec,
+                        ymax = max.sec,
+                        alpha = 0,
+                        color = "red",
+                        lwd = 0.5) +
+      ggplot2::annotate("rect",
+                        xmin = extraInformation$primary.cutoff.pos[1],
+                        xmax = max.pos,
+                        ymin = min.sec,
+                        ymax = max.sec,
+                        alpha = 0,
+                        color = "red",
+                        lwd = 0.5) +
+      ggplot2::annotate("rect",
+                        xmin = extraInformation$primary.cutoff.pos[1],
+                        xmax = max.pos,
+                        ymin = max.sec,
+                        ymax = max.sec + 0.5,
+                        alpha = 0.8,
+                        fill = "white",
+                        color = "red",
+                        lwd = 0.5)
 
+    # Visualize segments and SSI
+    for (range.visual in 1:length(!is.na(extraInformation$ssi))) {
 
-    p <- p + ggplot2::annotate("rect",
-                               xmin = p[["data"]] %>% as.data.frame() %>%
-                                 dplyr::select(marker1, marker2) %>%
-                                 dplyr::filter(.data[[marker2]] < extra$secondary.cutoff[1]) %>%
-                                 dplyr::select(all_of(marker1)) %>%
-                                 min(),
-                               xmax = extra$primary.cutoff.neg,
-                               ymin = p[["data"]] %>% as.data.frame() %>%
-                                 dplyr::select(marker2) %>%
-                                 base::min(.),
-                               ymax = extra$secondary.cutoff[1],
-                               alpha = 0,
-                               color = "red",
-                               lwd = 0.5) +
-      ggplot2::geom_rect(xmin = min(extra$segment.min, na.rm = TRUE), xmax = max(extra$segment.max, na.rm = TRUE),
-                         ymin = extra$secondary.cutoff[1]+ 0.1, ymax = extra$secondary.cutoff[1] + 1.3,
-                         alpha = 0.01, fill = "white", colour = "black")
-
-    for (range.visual in 1:length(!is.na(extra$ssi))) {
+      if (is.na(extraInformation$ssi)[range.visual]) { next }
       p <- p +
-        # borders of the ranges to calculate the ssi
         ggplot2::annotate("rect",
-                          xmin = extra$segment.min[range.visual],
-                          xmax = extra$segment.max[range.visual],
-                          ymin = p[["data"]] %>%
-                            as.data.frame() %>%
-                            dplyr::select(marker2) %>%
-                            base::min(.),
-                          ymax = extra$secondary.cutoff[1],
+                          xmin = extraInformation$primary.cutoff.pos[1],
+                          xmax = extraInformation$primary.cutoff.pos[1] + range.visual*range.value,
+                          ymin = min.sec,
+                          ymax = max.sec,
                           alpha = 0,
                           color = "red",
                           lwd = 0.5) +
-        # values of the ssi and mfi of the ranges
         ggplot2::annotate("text",
-                          label = round(extra$ssi[range.visual], 2),
-                          x = (extra$segment.min[range.visual] +
-                                 (extra$segment.max[range.visual] - extra$segment.min[range.visual])/2),
-                          # (extra.info.figure.sub$primary.cutoff.neg[range.visual]/2),
-                          # y = min(ff@exprs[, c(marker1, marker2)]) + 0.1*min(ff@exprs[, c(marker1, marker2)]),
-                          y = extra$secondary.cutoff[1]+ 0.7,
-                          size = 3,
+                          label = extraInformation$ssi[range.visual],
+                          x = extraInformation$primary.cutoff.pos[1] + (range.visual*range.value) - (range.value/2),
+                          y = max.sec + 0.25,
+                          size = 5,
                           colour = "red",
                           fontface = "bold",
-                          angle = 90)}
+                          angle = 35)
 
+      }
   }
 
 

@@ -4,12 +4,12 @@
 \alias{PlotDotSSI}
 \title{Plot dot plot of Secondary Stain Index scores}
 \usage{
-PlotDotSSI(output.compensAID, sample, primary, secondary, showScores = FALSE)
+PlotDotSSI(output.compensAID, og, primary, secondary, showScores = FALSE)
 }
 \arguments{
 \item{output.compensAID}{(matrix): Matrix containing the SSI output.}
 
-\item{sample}{(character): Name of sample.}
+\item{og}{(flowFrame): FlowFrame containing the expression matrix, channel names, and marker names.}
 
 \item{primary}{(character): Minimum SSI value shown in matrix.}
 
@@ -38,11 +38,15 @@ compensAID.res <- CompensAID(ff = file,
                              center.plot = center,
                              separation.distance = distance.populations)
 
+# Marker names
+primary.marker <- "CD19"
+secondary.marker <- "CD3"
+
 # Plot matrix
 figure <- PlotDotSSI(output.compensAID = compensAID.res,
-                     sample = "250410.fcs",
-                     primary = "CD19",
-                     secondary = "CD3",
+                     og = file,
+                     primary = primary.marker,
+                     secondary = secondary.marker,
                      showScores = TRUE)
 
 }

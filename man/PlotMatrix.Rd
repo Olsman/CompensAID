@@ -4,12 +4,10 @@
 \alias{PlotMatrix}
 \title{Plot Secondary Stain Index matrix}
 \usage{
-PlotMatrix(output.compensAID, sample, limit.min = -3, limit.max = 3)
+PlotMatrix(output.compensAID, limit.min = -3, limit.max = 3)
 }
 \arguments{
 \item{output.compensAID}{(matrix): Matrix containing the SSI output.}
-
-\item{sample}{(character): Name of sample.}
 
 \item{limit.min}{(numerical): Minimum SSI value shown in matrix.}
 
@@ -37,8 +35,7 @@ compensAID.res <- CompensAID(ff = file,
                              separation.distance = distance.populations)
 
 # Plot matrix
-figure <- PlotMatrix(output.compensAID = compensAID.res,
-                     sample = "68983.fcs")
+figure <- PlotMatrix(output.compensAID = compensAID.res)
 
 }
 \seealso{
