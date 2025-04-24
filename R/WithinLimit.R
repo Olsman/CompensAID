@@ -75,7 +75,6 @@ WithinLimit <- function(population, og, primary, secondary, min = 10, max = 90, 
 
   # Obtain percentages from secondary marker -----------------------------------
   percentage <- round((nrow(population[["secondary.negative"]])*100)/nrow(og))
-  si.input$secondary.perc.before[si.input$primary.marker == primary & si.input$secondary.marker == secondary] <- percentage
 
   # Get channel names
   cp <- names(flowCore::markernames(og))[flowCore::markernames(og) == primary]
@@ -88,7 +87,6 @@ WithinLimit <- function(population, og, primary, secondary, min = 10, max = 90, 
     # Perform density-based cut-off detection
     co.adjust <- flowDensity::deGate(og, channel = cs, all.cuts = TRUE, tinypeak.removal = 0.0001, verbose = FALSE, upper = TRUE)
     si.input$secondary.cutoff[si.input$primary.marker == primary & si.input$secondary.marker == secondary] <- GetClosestCenter(co.adjust, 2)
-    si.input$secondary.cutoff.adjusted[si.input$primary.marker == primary & si.input$secondary.marker == secondary] <- TRUE
     co.input$opt[co.input$channel == cs] <- GetClosestCenter(co.adjust, 2)
 
     # Obtain populations with new cut-off
@@ -97,29 +95,13 @@ WithinLimit <- function(population, og, primary, secondary, min = 10, max = 90, 
                           secondary = secondary,
                           co.input = co.input,
                           sd.input = sd.input)
-
-    # Obtain percentages
-    percentage <- round((nrow(pop[["secondary.negative"]])*100)/nrow(og))
-    si.input$secondary.perc.after[si.input$primary.marker == primary & si.input$secondary.marker == secondary] <- percentage
-
-    # Adjust information
-    si.input$secondary.cutoff.adjusted <- ifelse(si.input$secondary.perc.before == si.input$secondary.perc.after, FALSE, TRUE)
-
-
-    # Density-based cut-off detection parameters remained the same -------------
-    } else {
-
-      # Adjust information
-      si.input$secondary.cutoff.adjusted[si.input$primary.marker == primary & si.input$secondary.marker == secondary] <- FALSE
-      si.input$secondary.perc.after[si.input$primary.marker == primary & si.input$secondary.marker == secondary] <- percentage
-    }
+  }
 
 
   # Obtain percentages from primary marker -----------------------------------
   percentage.positive <- round((nrow(population[["primary.positive"]])*100)/nrow(og))
   percentage.negative <- round((nrow(population[["primary.negative"]])*100)/nrow(og))
-  si.input$primary.perc.pos.before[si.input$primary.marker == primary & si.input$secondary.marker == secondary] <- percentage.positive
-  si.input$primary.perc.neg.before[si.input$primary.marker == primary & si.input$secondary.marker == secondary] <- percentage.negative
+
 
   # Adjust density-based cut-off detection parameters --------------------------
   if (percentage.positive <= min | percentage.positive >= max | percentage.negative <= min | percentage.negative >= max) {
@@ -128,7 +110,6 @@ WithinLimit <- function(population, og, primary, secondary, min = 10, max = 90, 
     co.adjust <- flowDensity::deGate(og, channel = cp, all.cuts = TRUE, tinypeak.removal = 0.0001, verbose = FALSE, upper = TRUE)
     si.input$primary.cutoff.neg[si.input$primary.marker == primary & si.input$secondary.marker == secondary] <- GetClosestCenter(co.adjust, 2) - sd.input
     si.input$primary.cutoff.pos[si.input$primary.marker == primary & si.input$secondary.marker == secondary] <- GetClosestCenter(co.adjust, 2) + sd.input
-    si.input$primary.cutoff.adjusted[si.input$primary.marker == primary & si.input$secondary.marker == secondary] <- TRUE
     co.input$opt[co.input$channel == cp] <- GetClosestCenter(co.adjust, 2)
 
     # Obtain populations with new cut-off
@@ -137,26 +118,7 @@ WithinLimit <- function(population, og, primary, secondary, min = 10, max = 90, 
                           secondary = secondary,
                           co.input = co.input,
                           sd.input = sd.input)
-
-    # Obtain percentages
-    percentage.positive <- round((nrow(pop[["primary.positive"]])*100)/nrow(og))
-    percentage.negative <- round((nrow(pop[["primary.negative"]])*100)/nrow(og))
-    si.input$primary.perc.pos.after[si.input$primary.marker == primary & si.input$secondary.marker == secondary] <- percentage.positive
-    si.input$primary.perc.neg.after[si.input$primary.marker == primary & si.input$secondary.marker == secondary] <- percentage.negative
-
-    # Adjust information
-    si.input$primary.cutoff.adjusted <- ifelse(si.input$primary.perc.neg.before == si.input$primary.perc.neg.after |
-                                               si.input$primary.perc.pos.before == si.input$primary.perc.pos.after, FALSE, TRUE)
-
-
-    # Density-based cut-off detection parameters remained the same -------------
-    } else {
-
-      # Adjust information
-      si.input$primary.cutoff.adjusted[si.input$primary.marker == primary & si.input$secondary.marker == secondary] <- FALSE
-      si.input$primary.perc.neg.before[si.input$primary.marker == primary & si.input$secondary.marker == secondary] <- percentage.negative
-      si.input$primary.perc.pos.before[si.input$primary.marker == primary & si.input$secondary.marker == secondary] <- percentage.positive
-    }
+  }
 
 
   # Combine output -------------------------------------------------------------

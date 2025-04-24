@@ -31,19 +31,20 @@ PlotMatrix <- function(output.compensAID) {
 
   # Input validation -----------------------------------------------------------
   checkmate::checkMatrix(output.compensAID)
-  # checkmate::checkNumeric(limit.min)
-  # checkmate::checkNumeric(limit.max)
 
 
   # Obtain output --------------------------------------------------------------
   comp.temp <- output.compensAID[["matrix"]]
   comp.temp[is.na(comp.temp)] <- 0
+  colnames(comp.temp) <- output.compensAID[["matrixInfo"]]$pretty.primary[match(colnames(comp.temp), output.compensAID[["matrixInfo"]]$primary.channel)]
+  rownames(comp.temp) <- output.compensAID[["matrixInfo"]]$pretty.secondary[match(rownames(comp.temp), output.compensAID[["matrixInfo"]]$secondary.channel)]
 
   dfm <- reshape2::melt(comp.temp) %>%
     dplyr::mutate(value = as.numeric(value)) %>%
     dplyr::mutate(value2 = ifelse(value < 1 & value > -1, NA, value))
 
   order.figure <- colnames(comp.temp)
+
   limit.max <- ceiling(max(dfm$value))
   limit.min <- -limit.max
 
