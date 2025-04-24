@@ -4,14 +4,10 @@
 \alias{PlotMatrix}
 \title{Plot Secondary Stain Index matrix}
 \usage{
-PlotMatrix(output.compensAID, limit.min = -3, limit.max = 3)
+PlotMatrix(output.compensAID)
 }
 \arguments{
 \item{output.compensAID}{(matrix): Matrix containing the SSI output.}
-
-\item{limit.min}{(numerical): Minimum SSI value shown in matrix.}
-
-\item{limit.max}{(numerical): Maximum SSI value shown in matrix.}
 }
 \value{
 (ggplot2) Returns figure containing a matrix of the total compensAID output.

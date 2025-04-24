@@ -1,8 +1,6 @@
 #' @title Plot Secondary Stain Index matrix
 #'
 #' @param output.compensAID (matrix): Matrix containing the SSI output.
-#' @param limit.min (numerical): Minimum SSI value shown in matrix.
-#' @param limit.max (numerical): Maximum SSI value shown in matrix.
 #'
 #' @return (ggplot2) Returns figure containing a matrix of the total compensAID output.
 #'
@@ -28,13 +26,13 @@
 #'
 #' @export
 
-PlotMatrix <- function(output.compensAID, limit.min = -3, limit.max = 3) {
+PlotMatrix <- function(output.compensAID) {
 
 
   # Input validation -----------------------------------------------------------
   checkmate::checkMatrix(output.compensAID)
-  checkmate::checkNumeric(limit.min)
-  checkmate::checkNumeric(limit.max)
+  # checkmate::checkNumeric(limit.min)
+  # checkmate::checkNumeric(limit.max)
 
 
   # Obtain output --------------------------------------------------------------
@@ -46,7 +44,8 @@ PlotMatrix <- function(output.compensAID, limit.min = -3, limit.max = 3) {
     dplyr::mutate(value2 = ifelse(value < 1 & value > -1, NA, value))
 
   order.figure <- colnames(comp.temp)
-
+  limit.max <- ceiling(max(dfm$value))
+  limit.min <- -limit.max
 
   # Plot SSI matrix ------------------------------------------------------------
   if (all(is.na(dfm$value2))) {
@@ -72,8 +71,9 @@ PlotMatrix <- function(output.compensAID, limit.min = -3, limit.max = 3) {
                      text = ggplot2::element_text(size = 12, family = 'Helvetica', face = 'bold'),
                      panel.grid.minor = ggplot2::element_blank(),
                      panel.grid.major = ggplot2::element_blank(),
-                     panel.border = ggplot2::element_rect(colour = "black", fill=NA, size=2),
+                     panel.border = ggplot2::element_rect(colour = "black", fill=NA, linewidth=2),
                      axis.ticks.x = ggplot2::element_blank(),
+                     axis.text.x = ggplot2::element_text(angle = 90),
                      axis.ticks.y = ggplot2::element_blank(),
                      strip.background = ggplot2::element_blank(),
                      strip.text = ggplot2::element_blank(),
@@ -104,8 +104,9 @@ PlotMatrix <- function(output.compensAID, limit.min = -3, limit.max = 3) {
                      text = ggplot2::element_text(size = 12, family = 'Helvetica', face = 'bold'),
                      panel.grid.minor = ggplot2::element_blank(),
                      panel.grid.major = ggplot2::element_blank(),
-                     panel.border = ggplot2::element_rect(colour = "black", fill=NA, size=2),
+                     panel.border = ggplot2::element_rect(colour = "black", fill=NA, linewidth=2),
                      axis.ticks.x = ggplot2::element_blank(),
+                     axis.text.x = ggplot2::element_text(angle = 90),
                      axis.ticks.y = ggplot2::element_blank(),
                      strip.background = ggplot2::element_blank(),
                      strip.text = ggplot2::element_blank(),

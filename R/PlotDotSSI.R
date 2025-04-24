@@ -150,7 +150,7 @@ PlotDotSSI <- function(output.compensAID, og, primary, secondary, showScores = F
                         ymax = max.sec + 0.5,
                         alpha = 0.8,
                         fill = "white",
-                        color = "red",
+                        color = "black",
                         lwd = 0.5)
 
     # Visualize segments and SSI
@@ -170,10 +170,10 @@ PlotDotSSI <- function(output.compensAID, og, primary, secondary, showScores = F
                           label = extraInformation$ssi[range.visual],
                           x = extraInformation$primary.cutoff.pos[1] + (range.visual*range.value) - (range.value/2),
                           y = max.sec + 0.25,
-                          size = 5,
+                          size = 2,
                           colour = "red",
                           fontface = "bold",
-                          angle = 35)
+                          angle = 90)
 
       }
   }
