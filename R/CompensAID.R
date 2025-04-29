@@ -147,9 +147,9 @@ CompensAID <- function(ff, range.value = 4, events.value = 20, center.plot = 2, 
 
     # Adjust SSI matrix values
     if (all(is.na(si$ssi[si$primary.channel == pc & si$secondary.channel == sc]))) {
-      sm[pc, sc] <- NA
+      sm[sc, pc] <- NA
       } else {
-        sm[pc, sc] <- min(si$ssi[si$primary.channel == pc & si$secondary.channel == sc], na.rm = TRUE)
+        sm[sc, pc] <- min(si$ssi[si$primary.channel == pc & si$secondary.channel == sc], na.rm = TRUE)
       }
     }
 
