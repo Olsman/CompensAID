@@ -167,7 +167,7 @@ PlotDotSSI <- function(output.compensAID, og, primary, secondary, showScores = F
                           color = "red",
                           lwd = 0.5) +
         ggplot2::annotate("text",
-                          label = extraInformation$ssi[range.visual],
+                          label = ifelse(extraInformation$ssi[range.visual] == 0.00, 0, format(extraInformation$ssi[range.visual], nsmall = 2)),
                           x = extraInformation$primary.cutoff.pos[1] + (range.visual*range.value) - (range.value/2),
                           y = max.sec + 0.25,
                           size = 2,

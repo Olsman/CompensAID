@@ -45,7 +45,7 @@ PlotMatrix <- function(output.compensAID) {
 
   order.figure <- colnames(comp.temp)
 
-  limit.max <- ceiling(max(dfm$value))
+  limit.max <- ceiling(max(abs(dfm$value)))
   limit.min <- -limit.max
 
   # Plot SSI matrix ------------------------------------------------------------
@@ -57,7 +57,7 @@ PlotMatrix <- function(output.compensAID) {
       dplyr::mutate(value2 = 0) %>%
       ggplot2::ggplot(., ggplot2::aes(x = Var2, y = Var1)) +
       ggplot2::geom_tile(ggplot2::aes(fill = value2)) +
-      ggplot2::geom_text(ggplot2::aes(label = round(value, digits = 2)), size = 2, fontface = "bold") +
+      ggplot2::geom_text(ggplot2::aes(label = ifelse(value == 0.00, 0, format(value, nsmall = 2))), size = 2, fontface = "bold") +
       ggplot2::scale_fill_gradientn(name = "SSI",
                                     colours = c("#b2182b", "#ef8a62", "#fddbc7", "white","white","white", "#d1e5f0", "#67a9cf", "#2166ac"),
                                     na.value = "white",
@@ -89,7 +89,7 @@ PlotMatrix <- function(output.compensAID) {
                     Var2 = factor(Var2, levels = order.figure)) %>%
       ggplot2::ggplot(., ggplot2::aes(x = Var2, y = Var1)) +
       ggplot2::geom_tile(ggplot2::aes(fill = value2)) +
-      ggplot2::geom_text(ggplot2::aes(label = round(value, digits = 2)), size = 2, fontface = "bold") +
+      ggplot2::geom_text(ggplot2::aes(label = ifelse(value == 0.00, 0, format(value, nsmall = 2))), size = 2, fontface = "bold") +
       ggplot2::scale_fill_gradientn(name = "SSI",
                                     colours = c("#b2182b", "#ef8a62", "#fddbc7", "white","white","white", "#d1e5f0", "#67a9cf", "#2166ac"),
                                     na.value = "white",
