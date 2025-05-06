@@ -14,4 +14,4 @@ utils::globalVariables(globalVariables(c("file", "primary.marker", "primary.chan
                                        "ff", "range.value", "mc", "co", "separation.distance", ".")))
 
 # plotMatrix/plotDotSSI
-utils::globalVariables(globalVariables(c("p", "value", "Var1", "Var2", "value2")))
+utils::globalVariables(globalVariables(c("p", "value", "Var1", "Var2", "value2", "color")))
