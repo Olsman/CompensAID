@@ -1,0 +1,68 @@
+---
+title: "CompensAID"
+output: rmarkdown::html_vignette
+vignette: >
+  %\VignetteIndexEntry{CompensAID}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}
+---
+
+```{r, include = FALSE}
+knitr::opts_chunk$set(
+  collapse = TRUE,
+  comment = "#>"
+)
+```
+
+
+# Introduction
+The CompensAID package provides a quality control on compensation/unmixing accuracy. The CompensAID tool incorporates functions that will automatically calculates the standard deviation (SD) and mean fluoresence intensity (MFI) in the secondary channel for the negative and positive population in the primary channel. Next, the positive population is divided into equal segments prior to calculation of the secondary stain index (SSI). The SSI determines, based on 1) the MFI of the negative population, 2) the SD of the negative population, and 3) the MFI of the segmented positive population, if marker combinations exhibit signs of spillover errors in the form of overcompensation. The tool requires pre-processed Flow Cytometry Standard (FCS) files. 
+
+
+# Installing PeacoQC
+```{r setup}
+install.packages("devtools")
+devtools::install_github("https://github.com/Olsman/CompensAID")
+
+library(compensAID)
+```
+
+
+# Pre-processing
+The following pipeline is recommended to use for pre-processing your data.
+```{r, warning=FALSE, fig.show='hide'}
+# Read flowFrame
+file <- flowCore::read.FCS(system.file("extdata", "raw.68983.fcs", package = "compensAID"))
+
+# Remove margins
+file <- PeacoQC::RemoveMargins(ff = file,
+                               channels = colnames(flowCore::exprs(file)),
+                               output = "frame")
+
+# Compensate and transform the data
+file <- flowCore::compensate(file, colnames(file@description$SPILL))
+
+file <- flowCore::transform(file,
+                            flowCore::estimateLogicle(file, colnames(flowCore::keyword(file)$SPILL)))
+
+
+# Run PeacoQC
+pq <- PeacoQC::PeacoQC(ff = file,
+                       channels = colnames(flowCore::exprs(file)),
+                       save_fcs = FALSE,
+                       plot = FALSE,
+                       report = FALSE,
+                       output_directory = NULL)
+file <- pq$FinalFF
+```
+
+
+# CompensAID: run tool
+```{r, warning=FALSE, fig.show= 'hide'}
+file2 <- flowCore::read.FCS(system.file("extdata", "68983.fcs", package = "compensAID"))
+```
+
+```{r session-info, echo=FALSE}
+sessionInfo()
+```
+

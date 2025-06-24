@@ -2,27 +2,42 @@ Package: compensAID
 Type: Package
 Title: Automated detection tool for spillover errors
 Version: 0.1.0
-Authors@R: c(person("Rosan", "Olsman", role = c("aut", "cre"),
-            email = "r.olsman@erasmusmc.nl"),
-            person("Sarah", "Bonte", role = c("aut"),
-            email = "sarahm.bonte@ugent.be"),
-            person("Mattias", "Hofmans", role = c("aut"),
-            email = "mattias.hofmans@uzgent.be"),
-            person("Malicorne", "Buysse", role = c("aut"),
-            email = "malicorne.buysse@uzgent.be"),
-            person("Katrien","Van der Borght",role="aut",
-            email="katrien.vanderborght@irc.vib-ugent.be"),
-            person("Yvan", "Saeys", role = "aut", 
-            email="yvan.saeys@ugent.be"),
-            person("Vincent", "van der Velden", role = "aut", 
-            email="v.h.j.vandervelden@erasmusmc.nl"),
-            person("Sofie", "Van Gassen", role = "aut", 
-            email="sofie.vangassen@ugent.be"))
-Maintainer: Rosan Olsman <r.olsman@erasmusmc.nl>
-Description: The compensAID tool automatically calculates the secondary stain index for an automated detection of spillover errors.
+Authors@R: c(person("Rosan", "Olsman", 
+                    role = c("aut", "cre"),
+                    email = "r.olsman@erasmusmc.nl",
+                    comment = c(ORCID = "0000-0001-5070-0476")),
+             person("Sarah", "Bonte", 
+                    role = c("aut"),
+                    email = "sarahm.bonte@ugent.be",
+                    comment = c(ORCID = "0000-0002-0637-4893")),
+             person("Mattias", "Hofmans", 
+                    role = c("aut"),
+                    email = "mattias.hofmans@uzgent.be",
+                    comment = c(ORCID = "0000-0003-2061-7617")),
+             person("Malicorne", "Buysse", 
+                    role = c("aut"),
+                    email = "malicorne.buysse@uzgent.be"),
+             person("Katrien","Van der Borght",
+                    role="aut",
+                    email="katrien.vanderborght@irc.vib-ugent.be",
+                    comment = c(ORCID = "0000-0003-1635-4359")),
+             person("Yvan", "Saeys", 
+                    role = "aut", 
+                    email="yvan.saeys@ugent.be",
+                    comment = c(ORCID = "0000-0002-0415-1506")),
+             person("Vincent", "van der Velden", 
+                    role = "aut", 
+                    email="v.h.j.vandervelden@erasmusmc.nl",
+                    comment = c(ORCID = "0000-0001-9457-3763")),
+             person("Sofie", "Van Gassen", 
+                    role = "aut", 
+                    email="sofie.vangassen@ugent.be",
+                    comment = c(ORCID = "0000-0002-7119-5330")))
+Description: The CompensAID tool automatically calculates the secondary stain index for an automated detection of spillover errors.
+URL: https://github.com/Olsman/CompensAID
+BugReports: https://github.com/Olsman/CompensAID/issues
 License: GPL (>= 3)
 Encoding: UTF-8
-LazyData: true
 RoxygenNote: 7.3.2
 Imports: 
     checkmate,
@@ -40,3 +55,8 @@ Imports:
     tibble,
     tidyr,
     utils
+biocViews: FlowCytometry, QualityControl, Preprocessing
+Suggests: 
+    knitr,
+    rmarkdown
+VignetteBuilder: knitr

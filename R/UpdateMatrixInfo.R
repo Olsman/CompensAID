@@ -84,8 +84,8 @@ UpdateMatrixInfo <- function(si.input, range.input = NULL, primary, secondary, o
   checkmate::checkList(population)
 
   # Channel names
-  channel.primary = si.input$primary.channel[si.input$primary.marker == primary & si.input$secondary.marker == secondary][1]
-  channel.secondary = si.input$secondary.channel[si.input$primary.marker == primary & si.input$secondary.marker == secondary][1]
+  channel.primary <- si.input$primary.channel[si.input$primary.marker == primary & si.input$secondary.marker == secondary][1]
+  channel.secondary <- si.input$secondary.channel[si.input$primary.marker == primary & si.input$secondary.marker == secondary][1]
 
 
   # Update SSI information if there is no positive/negative population ---------
@@ -105,7 +105,7 @@ UpdateMatrixInfo <- function(si.input, range.input = NULL, primary, secondary, o
 
 
     # Obtain information per segment -------------------------------------------
-    for (s in 1:rv.input) {
+    for (s in seq_len(rv.input)) {
 
       # Minimum fluorescence value within the segment
       si.input$segment.min[si.input$primary.marker == primary &
@@ -158,7 +158,7 @@ UpdateMatrixInfo <- function(si.input, range.input = NULL, primary, secondary, o
 
 
     # Calculate the Secondary Stain Index --------------------------------------
-    for (s in 1:rv.input) {
+    for (s in seq_len(rv.input)) {
 
       # SSI per segment
       si.input$ssi[si.input$primary.marker == primary &

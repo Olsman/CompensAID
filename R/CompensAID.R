@@ -61,7 +61,7 @@ CompensAID <- function(ff, range.value = 4, events.value = 20, center.plot = 2, 
 
 
   # Perform density-based cut-off detection ------------------------------------
-  for (i in 1:nrow(mc)) {
+  for (i in seq_len(nrow(mc))) {
 
     # Perform density-based cut-off detection
     co.renew <- co

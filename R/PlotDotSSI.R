@@ -57,7 +57,6 @@ PlotDotSSI <- function(output.compensAID, og, primary, secondary, showScores = F
 
 
     # Visualize dot plot -------------------------------------------------------
-    set.seed(20)
     p <- ggcyto::autoplot(og,
                           x = primary,
                           y = secondary,
@@ -84,7 +83,6 @@ PlotDotSSI <- function(output.compensAID, og, primary, secondary, showScores = F
 
 
     # Visualize dot plot -------------------------------------------------------
-    set.seed(20)
     p <- ggcyto::autoplot(og,
                           x = primary,
                           y = secondary,
@@ -154,7 +152,7 @@ PlotDotSSI <- function(output.compensAID, og, primary, secondary, showScores = F
                         lwd = 0.5)
 
     # Visualize segments and SSI
-    for (range.visual in 1:length(!is.na(extraInformation$ssi))) {
+    for (range.visual in seq_len(length(!is.na(extraInformation$ssi)))) {
 
       if (is.na(extraInformation$ssi)[range.visual]) { next }
       p <- p +

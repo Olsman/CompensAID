@@ -74,9 +74,9 @@ EmptyMatrixInfo <- function(og = ff,
                   segment.max = NA,
                   event.count = NA,
                   event.count.merge = NA) %>%
-    dplyr::slice(rep(1:nrow(.), each = rv.input)) %>%
+    dplyr::slice(rep(seq_len(nrow(.)), each = rv.input)) %>%
     dplyr::group_by(primary.marker, secondary.marker) %>%
-    dplyr::mutate(segment = rep(1:rv.input)) %>%
+    dplyr::mutate(segment = rep(seq_len(rv.input))) %>%
     dplyr::select(file, primary.marker, primary.channel, pretty.primary, secondary.marker, secondary.channel, pretty.secondary,
                   segment, secondary.cutoff, primary.cutoff.neg, primary.cutoff.pos, segment.min, segment.max, event.count, event.count.merge,
                   mfi.neg, sd.neg, mfi.pos, ssi, message)

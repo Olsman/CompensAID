@@ -81,11 +81,11 @@ UpdateSSI <- function(si.input, rv.input, primary, secondary, population) {
 
   # Obtain information
   population.positive <- population$primary.positive
-  primary.channel = si.input$primary.channel[si.input$primary.marker == primary & si.input$secondary.marker == secondary][1]
-  secondary.channel = si.input$secondary.channel[si.input$primary.marker == primary & si.input$secondary.marker == secondary][1]
+  primary.channel <- si.input$primary.channel[si.input$primary.marker == primary & si.input$secondary.marker == secondary][1]
+  secondary.channel <- si.input$secondary.channel[si.input$primary.marker == primary & si.input$secondary.marker == secondary][1]
 
   # Update SSI per segment -----------------------------------------------------
-  for (s in 1:rv.input) {
+  for (s in seq_len(rv.input)) {
 
     # Skip iteration if segment is ok
     if (si.input$message[si.input$primary.channel == primary.channel &
