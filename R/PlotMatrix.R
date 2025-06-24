@@ -75,7 +75,7 @@ PlotMatrix <- function(output.compensAID) {
                   panel.grid.major = ggplot2::element_blank(),
                   panel.border = ggplot2::element_rect(colour = "black", fill=NA, linewidth=2),
                   axis.ticks.x = ggplot2::element_blank(),
-                  axis.text.x = ggplot2::element_text(angle = 90),
+                  axis.text.x = ggplot2::element_text(angle = 90, vjust = 0.5, hjust=1),
                   axis.ticks.y = ggplot2::element_blank(),
                   strip.background = ggplot2::element_blank(),
                   strip.text = ggplot2::element_blank(),
