@@ -24,7 +24,7 @@ This process allows for a more detailed and automated assessment of marker combi
 # Installing CompensAID
 ```{r setup}
 # install.packages("devtools")
-# devtools::install_github("https://github.com/Olsman/CompensAID")
+devtools::install_github("https://github.com/Olsman/CompensAID")
 
 library(compensAID)
 ```
