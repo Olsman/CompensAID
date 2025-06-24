@@ -64,8 +64,8 @@ file <- file$FinalFF
 # Retain only markers
 file <- file[, names(flowCore::markernames(file))]
 
-# Write pre-processed FCS file
-flowCore::write.FCS(file, filename = ("path/to/your/directory/.../68983.fcs"))
+# Pre-processed data 
+file <- flowCore::read.FCS(system.file("extdata", "68983.fcs", package = "compensAID"))
 ```
 
 # Visualize pre-processed data
