@@ -11,7 +11,7 @@
 #'
 #' @examples
 #' # Import FCS file
-#' file <- flowCore::read.FCS(system.file("extdata", "68983.fcs", package = "compensAID"))
+#' file <- flowCore::read.FCS(system.file("extdata", "68983.fcs", package = "CompensAID"))
 #'
 #' # Parameter for the number of segments
 #' range.value <- 4

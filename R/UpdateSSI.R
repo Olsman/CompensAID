@@ -12,7 +12,7 @@
 #'
 #' @examples
 #' # Import FCS file
-#' file <- flowCore::read.FCS(system.file("extdata", "68983.fcs", package = "compensAID"))
+#' file <- flowCore::read.FCS(system.file("extdata", "68983.fcs", package = "CompensAID"))
 #'
 #' # Parameter for the number of segments
 #' range.value <- 4
@@ -90,12 +90,15 @@ UpdateSSI <- function(si.input, rv.input, primary, secondary, population) {
     # Skip iteration if segment is ok
     if (si.input$message[si.input$primary.channel == primary.channel &
                          si.input$secondary.channel == secondary.channel &
-                         si.input$segment == s] == "PASS") { next }
-
-    # Skip iteration if segment is merged
-    if (is.na(si.input$mfi.neg[si.input$primary.channel == primary.channel &
+                         si.input$segment == s] == "PASS" |
+        is.na(si.input$message[si.input$primary.channel == primary.channel &
                                si.input$secondary.channel == secondary.channel &
                                si.input$segment == s])) { next }
+
+    # Skip iteration if segment is merged
+    # if (is.na(si.input$message[si.input$primary.channel == primary.channel &
+    #                            si.input$secondary.channel == secondary.channel &
+    #                            si.input$segment == s])) { next }
 
     # Get segment minimum
     new.min <- si.input$segment.min[si.input$primary.channel == primary.channel &

@@ -21,7 +21,7 @@ Assess event requirement
 }
 \examples{
 # Import FCS file
-file <- flowCore::read.FCS(system.file("extdata", "68983.fcs", package = "compensAID"))
+file <- flowCore::read.FCS(system.file("extdata", "68983.fcs", package = "CompensAID"))
 
 # Marker names
 primary.marker <- "CD19"

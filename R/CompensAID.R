@@ -1,4 +1,4 @@
-#' @title Run compensAID tool; automated detection of compensation issues
+#' @title Run CompensAID tool; automated detection of compensation issues
 #'
 #' @param ff (FlowFrame): FlowFrame containing the expression matrix, channel names, and marker names.
 #' @param range.value (numerical): Numerical value of the number of segments in the primary positive population.
@@ -10,7 +10,7 @@
 #'
 #' @examples
 #' # Import FCS file
-#' file <- flowCore::read.FCS(system.file("extdata", "68983.fcs", package = "compensAID"))
+#' file <- flowCore::read.FCS(system.file("extdata", "68983.fcs", package = "CompensAID"))
 #'
 #' # Run compensAID tool
 #' segments <- 4
@@ -148,10 +148,12 @@ CompensAID <- function(ff, range.value = 4, events.value = 20, center.plot = 2, 
     # Adjust SSI matrix values
     if (all(is.na(si$ssi[si$primary.channel == pc & si$secondary.channel == sc]))) {
       sm[sc, pc] <- NA
-      } else {
-        sm[sc, pc] <- min(si$ssi[si$primary.channel == pc & si$secondary.channel == sc], na.rm = TRUE)
-      }
+    } else if (all(na.omit(si$ssi[si$primary.channel == pc & si$secondary.channel == sc]) > 0)) {
+      sm[sc, pc] <- max(si$ssi[si$primary.channel == pc & si$secondary.channel == sc], na.rm = TRUE)
+    } else {
+      sm[sc, pc] <- min(si$ssi[si$primary.channel == pc & si$secondary.channel == sc], na.rm = TRUE)
     }
+  }
 
 
   # Generate output ------------------------------------------------------------

@@ -43,7 +43,7 @@ Detect if smaller peaks need included for density-based cut-off detection.
 }
 \examples{
 # Import FCS file
-file <- flowCore::read.FCS(system.file("extdata", "68983.fcs", package = "compensAID"))
+file <- flowCore::read.FCS(system.file("extdata", "68983.fcs", package = "CompensAID"))
 
 # Obtain all possible marker combinations
 mc <- GetMarkerCombinations(og = file)

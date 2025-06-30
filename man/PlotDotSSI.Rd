@@ -25,7 +25,7 @@ Plot dot plot of Secondary Stain Index scores
 }
 \examples{
 # Import FCS file
-file <- flowCore::read.FCS(system.file("extdata", "68983.fcs", package = "compensAID"))
+file <- flowCore::read.FCS(system.file("extdata", "68983.fcs", package = "CompensAID"))
 
 # Run compensAID tool
 segments <- 4

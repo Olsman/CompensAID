@@ -73,43 +73,65 @@
 #'                      ev.input = events.value,
 #'                      rv.input = segment.value)
 #'
+#' # Identify which segments needs to be merged
+#' merges <- MergeSegments(si.input$event.count[si.input$primary.marker == primary.marker & si.input$secondary.marker == secondary.marker], ev.input)
+#'
 #' @export
 
-UpdateSegments <- function(si.input, primary, secondary, ev.input, rv.input) {
+
+MergeSegments <- function(segment.event.count, ev.input) {
 
 
   # Input validation -----------------------------------------------------------
-  checkmate::checkDataFrame(si.input)
-  checkmate::checkCharacter(primary)
-  checkmate::checkCharacter(secondary)
+  checkmate::checkNumeric(segment.event.count)
   checkmate::checkNumeric(ev.input)
-  checkmate::checkNumeric(rv.input)
 
 
-  # Merge segments -------------------------------------------------------------
-  if (si.input$message[si.input$primary.marker == primary &
-                       si.input$secondary.marker == secondary][1] != "No positive/negative population") {
+  # Temporary empty lists
+  merged <- list()
+  buffer <- 0
+  temp <- c()
+  indices <- c()
+  merged.indices <- list()
 
-    # Identify which segments need to be merged
-    merge <- MergeSegments(si.input$event.count[si.input$primary.marker == primary &
-                                                si.input$secondary.marker == secondary],
-                           ev.input)
-    si.input$mergeGroup <- NA
 
-    # Assign merge IDs
-    for (i in seq_along(merge)) {
+  # Iterate over segments ------------------------------------------------------
+  for (i in rev(seq_along(segment.event.count))) {
 
-      si.input$mergeGroup[si.input$primary.marker == primary &
-                          si.input$secondary.marker == secondary][merge[[i]]] <- i
+    # Identify event count and segment numbers
+    buffer <- buffer + segment.event.count[i]
+    temp <- c(temp, segment.event.count[i])
+    indices <- c(indices, i)
+
+    # Assess event requirement
+    if (buffer >= ev.input) {
+      merged <- append(merged, list(temp))
+      merged.indices <- append(merged.indices, list(indices))
+
+      # Reset for iteration
+      buffer <- 0
+      temp <- c()
+      indices <- c()
     }
+  }
 
-    # Adjust segment information
-    si.input <- AdjustSegments(si.input,
-                               mp = primary,
-                               ms = secondary)
+
+  # Append segments not meeting the requirement --------------------------------
+  if (length(temp) > 0) {
+
+    if (length(merged.indices) > 0) {
+
+      # Add remaining segments to the last merged group
+      merged.indices[[length(merged.indices)]] <- c(merged.indices[[length(merged.indices)]], indices)
+
+      } else {
+
+      # Create groups
+      merged.indices <- list(indices)
+      }
   }
 
 
   # Generate output ------------------------------------------------------------
-  return(si.input)
+  return(merged.indices)
 }

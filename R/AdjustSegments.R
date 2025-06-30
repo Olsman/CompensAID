@@ -1,10 +1,8 @@
-#' @title Combine segments that do not meet the requirements
+#' @title Adjust (merged) segment information
 #'
-#' @param si.input (dataFrame): dataFrame containing SSI info.
-#' @param primary (character): Name of the primary marker.
-#' @param secondary (character) Name of the secondary marker.
-#' @param ev.input (numerical): Minimum required number of events.
-#' @param rv.input (numerical): Number of segments.
+#' @param si.input (dataFrame): DataFrame containing the SSI info.
+#' @param mp (character): Name of the primary marker.
+#' @param ms (character): Name of the secondary marker.
 #'
 #' @return (dataFrame) Returns a dataframe with an update SSI information dataFrame.
 #'
@@ -73,43 +71,69 @@
 #'                      ev.input = events.value,
 #'                      rv.input = segment.value)
 #'
+#' # Adjust segment information
+#' si <- AdjustSegments(si.input = si,
+#'                      mp = primary.marker,
+#'                      ms = secondary.marker)
+#'
 #' @export
 
-UpdateSegments <- function(si.input, primary, secondary, ev.input, rv.input) {
+AdjustSegments <- function(si.input, mp, ms) {
 
 
   # Input validation -----------------------------------------------------------
   checkmate::checkDataFrame(si.input)
-  checkmate::checkCharacter(primary)
-  checkmate::checkCharacter(secondary)
-  checkmate::checkNumeric(ev.input)
-  checkmate::checkNumeric(rv.input)
+  checkmate::checkCharacter(mp)
+  checkmate::checkCharacter(ms)
 
 
-  # Merge segments -------------------------------------------------------------
-  if (si.input$message[si.input$primary.marker == primary &
-                       si.input$secondary.marker == secondary][1] != "No positive/negative population") {
+  # Add temporary columns ------------------------------------------------------
+  si.input$segment.min.merged <- NA
+  si.input$segment.max.merged <- NA
+  si.input$event.count.sum <- NA
+  si.input$merged.segments <- NA
 
-    # Identify which segments need to be merged
-    merge <- MergeSegments(si.input$event.count[si.input$primary.marker == primary &
-                                                si.input$secondary.marker == secondary],
-                           ev.input)
-    si.input$mergeGroup <- NA
 
-    # Assign merge IDs
-    for (i in seq_along(merge)) {
+  # Merge and Adjust segments --------------------------------------------------
+  for (grp in unique(si.input$mergeGroup)) {
 
-      si.input$mergeGroup[si.input$primary.marker == primary &
-                          si.input$secondary.marker == secondary][merge[[i]]] <- i
+
+    # Identify merge
+    group.rows <- which(si.input$mergeGroup[si.input$primary.marker == mp &
+                                            si.input$secondary.marker == ms] == grp)
+
+    # Skip empty rows
+    if (length(group.rows) == 0) { next }
+
+
+    # Determine new segment ranges and event counts ----------------------------
+    min.val <- min(si.input$segment.min[si.input$primary.marker == mp &
+                                        si.input$secondary.marker == ms][group.rows])
+    max.val <- max(si.input$segment.max[si.input$primary.marker == mp &
+                                        si.input$secondary.marker == ms][group.rows])
+    sum.val <- sum(si.input$event.count[si.input$primary.marker == mp &
+                                        si.input$secondary.marker == ms][group.rows])
+    segments.merged <- paste(si.input$segment[si.input$primary.marker == mp &
+                                              si.input$secondary.marker == ms][group.rows], collapse = "+")
+
+
+    # Input values -------------------------------------------------------------
+    first.row <- group.rows[1]
+    si.input$segment.min.merged[si.input$primary.marker == mp &
+                                si.input$secondary.marker == ms][first.row] <- min.val
+    si.input$segment.max.merged[si.input$primary.marker == mp &
+                                si.input$secondary.marker == ms][first.row] <- max.val
+    si.input$event.count.sum[si.input$primary.marker == mp &
+                             si.input$secondary.marker == ms][first.row] <- sum.val
+    si.input$merged.segments[si.input$primary.marker == mp &
+                             si.input$secondary.marker == ms][first.row] <- segments.merged
     }
 
-    # Adjust segment information
-    si.input <- AdjustSegments(si.input,
-                               mp = primary,
-                               ms = secondary)
-  }
+
+  # Clean dataFrame ------------------------------------------------------------
+  si.input <- CleanSegments(si.input, mp, ms)
 
 
   # Generate output ------------------------------------------------------------
   return(si.input)
-}
+  }

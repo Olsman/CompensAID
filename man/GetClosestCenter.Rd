@@ -19,7 +19,7 @@ Identify value closest to visual estimation
 }
 \examples{
 # Import FCS file
-file <- flowCore::read.FCS(system.file("extdata", "68983.fcs", package = "compensAID"))
+file <- flowCore::read.FCS(system.file("extdata", "68983.fcs", package = "CompensAID"))
 primary.channel <- "PE-Cy5-A"
 
 # Density-based cut-off detection of a single channel.

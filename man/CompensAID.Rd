@@ -2,7 +2,7 @@
 % Please edit documentation in R/CompensAID.R
 \name{CompensAID}
 \alias{CompensAID}
-\title{Run compensAID tool; automated detection of compensation issues}
+\title{Run CompensAID tool; automated detection of compensation issues}
 \usage{
 CompensAID(
   ff,
@@ -27,11 +27,11 @@ CompensAID(
 (list) Returns a list containing the full SSI output and SSI matrix
 }
 \description{
-Run compensAID tool; automated detection of compensation issues
+Run CompensAID tool; automated detection of compensation issues
 }
 \examples{
 # Import FCS file
-file <- flowCore::read.FCS(system.file("extdata", "68983.fcs", package = "compensAID"))
+file <- flowCore::read.FCS(system.file("extdata", "68983.fcs", package = "CompensAID"))
 
 # Run compensAID tool
 segments <- 4
