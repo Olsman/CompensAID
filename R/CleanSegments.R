@@ -149,7 +149,7 @@ CleanSegments <- function(si.input, mp, ms) {
            is.na(si.input$merged.segments), c("message", "mfi.neg", "mfi.pos", "sd.neg", "ssi")] <- NA
 
   # Remove temporary columns
-  si.input <- subset(si.input, select = -c(merge_group, segment.min.merged, segment.max.merged, event.count.sum, merged.segments))
+  si.input <- subset(si.input, select = -c(mergeGroup, segment.min.merged, segment.max.merged, event.count.sum, merged.segments))
 
 
   # Generate output ------------------------------------------------------------
