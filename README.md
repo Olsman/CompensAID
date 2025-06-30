@@ -18,6 +18,8 @@ Key Features
 Installation
 --------
 Install the package using the following command in R:
+
+install.packages("devtools")
 devtools::install_github("Olsman/CompensAID")
 
 
