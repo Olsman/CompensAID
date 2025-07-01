@@ -1,12 +1,9 @@
-#' @title Combine segments that do not meet the requirements
+#' @title Asssess which segments do not meet the requirements
 #'
-#' @param si.input (dataFrame): dataFrame containing SSI info.
-#' @param primary (character): Name of the primary marker.
-#' @param secondary (character) Name of the secondary marker.
+#' @param segment.event.count (numerical): Number of events per segment
 #' @param ev.input (numerical): Minimum required number of events.
-#' @param rv.input (numerical): Number of segments.
 #'
-#' @return (dataFrame) Returns a dataframe with an update SSI information dataFrame.
+#' @return (list) Returns a list with which segments need to be merged.
 #'
 #' @seealso \code{\link{CompensAID}}, \code{\link{DensityGating}}, \code{\link{EmptyMatrixInfo}}, \code{\link{UpdateMatrixInfo}}, \code{\link{GetPopulations}}
 #'
@@ -65,16 +62,13 @@
 #'                        output = "PASS",
 #'                        population = pop)
 #'
-#' # Update segments
+#' # Update segments; function calls MergeSegments
 #' events.value <- 20
 #' si <- UpdateSegments(si.input = si,
 #'                      primary = primary.marker,
 #'                      secondary = secondary.marker,
 #'                      ev.input = events.value,
 #'                      rv.input = segment.value)
-#'
-#' # Identify which segments needs to be merged
-#' merges <- MergeSegments(si.input$event.count[si.input$primary.marker == primary.marker & si.input$secondary.marker == secondary.marker], ev.input)
 #'
 #' @export
 

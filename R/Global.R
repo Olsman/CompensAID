@@ -13,5 +13,11 @@ utils::globalVariables(globalVariables(c("file", "primary.marker", "primary.chan
                                        "primary.perc.pos.after", "secondary.cutoff.adjusted", "secondary.perc.before", "secondary.perc.after",
                                        "ff", "range.value", "mc", "co", "separation.distance", ".")))
 
-# plotMatrix/plotDotSSI
+# PlotMatrix/PlotDotSSI
 utils::globalVariables(globalVariables(c("p", "value", "Var1", "Var2", "value2", "color")))
+
+# CleanMatrix
+utils::globalVariables(globalVariables(c("mergeGroup", "segment.min.merged", "segment.max.merged")))
+
+# CleanMatrix
+utils::globalVariables(globalVariables(c("event.count.sum", "merged.segments")))

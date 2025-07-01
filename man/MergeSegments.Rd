@@ -2,26 +2,20 @@
 % Please edit documentation in R/MergeSegments.R
 \name{MergeSegments}
 \alias{MergeSegments}
-\title{Combine segments that do not meet the requirements}
+\title{Asssess which segments do not meet the requirements}
 \usage{
 MergeSegments(segment.event.count, ev.input)
 }
 \arguments{
+\item{segment.event.count}{(numerical): Number of events per segment}
+
 \item{ev.input}{(numerical): Minimum required number of events.}
-
-\item{si.input}{(dataFrame): dataFrame containing SSI info.}
-
-\item{primary}{(character): Name of the primary marker.}
-
-\item{secondary}{(character) Name of the secondary marker.}
-
-\item{rv.input}{(numerical): Number of segments.}
 }
 \value{
-(dataFrame) Returns a dataframe with an update SSI information dataFrame.
+(list) Returns a list with which segments need to be merged.
 }
 \description{
-Combine segments that do not meet the requirements
+Asssess which segments do not meet the requirements
 }
 \examples{
 # Import FCS file
@@ -78,16 +72,13 @@ si <- UpdateMatrixInfo(si.input = si,
                        output = "PASS",
                        population = pop)
 
-# Update segments
+# Update segments; function calls MergeSegments
 events.value <- 20
 si <- UpdateSegments(si.input = si,
                      primary = primary.marker,
                      secondary = secondary.marker,
                      ev.input = events.value,
                      rv.input = segment.value)
-
-# Identify which segments needs to be merged
-merges <- MergeSegments(si.input$event.count[si.input$primary.marker == primary.marker & si.input$secondary.marker == secondary.marker], ev.input)
 
 }
 \seealso{

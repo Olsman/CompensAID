@@ -74,18 +74,13 @@ si <- UpdateMatrixInfo(si.input = si,
                        output = "PASS",
                        population = pop)
 
-# Update segments
+# Update segments; function calls AdjustSegments
 events.value <- 20
 si <- UpdateSegments(si.input = si,
                      primary = primary.marker,
                      secondary = secondary.marker,
                      ev.input = events.value,
                      rv.input = segment.value)
-
-# Adjust segment information
-si <- AdjustSegments(si.input = si,
-                     mp = primary.marker,
-                     ms = secondary.marker)
 
 }
 \seealso{
