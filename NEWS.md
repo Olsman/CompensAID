@@ -9,3 +9,6 @@
 * Added WithinLimit function
 * Updated PlotDotSSI function
 
+# CompensAID 0.99.1
+
+* Removed '.Rproj' file
