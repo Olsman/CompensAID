@@ -1,3 +1,11 @@
-# compensAID 0.1.0
+# CompensAID 0.99.0
 
-* Initial CRAN submission.
+* Initial Bioconductor submission.
+
+# CompensAID 0.99.1
+
+* Adjusted Bioconductor in NEWS
+* Provided a description of the example data
+* Added WithinLimit function
+* Updated PlotDotSSI function
+

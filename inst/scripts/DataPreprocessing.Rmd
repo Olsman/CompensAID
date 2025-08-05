@@ -1,0 +1,37 @@
+# Pre-processing
+The following script, more in-depth description in the vignette, was used to obtain the pre-processed FCS file used for examples within the CompensAID package.
+```{r pre-processing, eval = FALSE}
+# Required packages
+library(FlowCore)
+library(PeacoQC)
+
+# Read FlowFrame
+file <- flowCore::read.FCS(system.file("extdata", "raw.68983.fcs", package = "CompensAID"))
+
+# Remove margins (for conventional only)
+file <- PeacoQC::RemoveMargins(ff = file,
+                               channels = colnames(flowCore::exprs(file)),
+                               output = "frame")
+
+# Compensate data (for conventional only)
+file <- flowCore::compensate(file, file@description$SPILL)
+
+# Transform data 
+file <- flowCore::transform(file,
+                            flowCore::estimateLogicle(file, colnames(flowCore::keyword(file)$SPILL)))
+
+# Run PeacoQC
+file <- PeacoQC::PeacoQC(ff = file,
+                       channels = colnames(flowCore::exprs(file)),
+                       save_fcs = FALSE,
+                       plot = FALSE,
+                       report = FALSE,
+                       output_directory = NULL)
+file <- file$FinalFF
+
+# Retain only markers
+file <- file[, names(flowCore::markernames(file))]
+
+# save file
+flowCore::write.FCS(file, "path/to/folder/68983.fcs")
+```

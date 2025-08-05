@@ -38,11 +38,11 @@
 #'
 #' @export
 
-PlotDotSSI <- function(output.compensAID, og, primary, secondary, showScores = FALSE) {
+PlotDotSSI <- function(output.compensAID, og, primary, secondary, showScores = TRUE) {
 
 
   # Input validation -----------------------------------------------------------
-  checkmate::checkMatrix(output.compensAID)
+  checkmate::checkList(output.compensAID)
   checkmate::assert(methods::is(og, "flowFrame"), "Object is not a flowFrame.")
   checkmate::checkCharacter(primary)
   checkmate::checkCharacter(secondary)
@@ -104,23 +104,22 @@ PlotDotSSI <- function(output.compensAID, og, primary, secondary, showScores = F
       ggplot2::theme(aspect.ratio=1)
     p <- ggcyto::as.ggplot(p)
 
-    # Add annotation: adjust gating because of bins
+    # Add annotation: adjust visualization because of bins from ggcyto
     raw.annotation <- p$data %>%
       dplyr::select(extraInformation$primary.channel[1], extraInformation$secondary.channel[1]) %>%
       dplyr::filter(!!rlang::sym(extraInformation$secondary.channel[1]) < extraInformation$secondary.cutoff[1])
 
+    # Retrieve min and max values per 
     min.neg <- raw.annotation %>% dplyr::select(extraInformation$primary.channel[1]) %>% min()
     max.pos <- raw.annotation %>% dplyr::select(extraInformation$primary.channel[1]) %>% max()
-
     min.sec <- raw.annotation %>% dplyr::select(extraInformation$secondary.channel[1]) %>% min()
     max.sec <- raw.annotation %>% dplyr::select(extraInformation$secondary.channel[1]) %>% max()
 
-    range <- raw.annotation %>%
-      dplyr::filter(!!rlang::sym(extraInformation$primary.channel[1]) > extraInformation$primary.cutoff.pos[1]) %>%
+    # Retrieve the range for visualization
+    range <- raw.annotation %>% 
+      dplyr::filter(!!rlang::sym(extraInformation$primary.channel[1]) > extraInformation$primary.cutoff.pos[1]) %>% 
       dplyr::pull(extraInformation$primary.channel[1])
-
-    range.value <- (max(range)-min(range))/max(extraInformation$segment)
-
+    range.value <- (max(range) - min(range))/max(extraInformation$segment)
 
     # Show scores --------------------------------------------------------------
     # Visualize gating
@@ -152,13 +151,23 @@ PlotDotSSI <- function(output.compensAID, og, primary, secondary, showScores = F
                         lwd = 0.5)
 
     # Visualize segments and SSI
-    for (range.visual in seq_len(length(!is.na(extraInformation$ssi)))) {
+    for (range.visual in extraInformation$segment[!is.na(extraInformation$ssi)]) {
+      
+      
+      # Visualization distances for text and boxes
+      if (extraInformation$message[range.visual] == "PASS") {
+      dist <- range.visual
+      dist.text <- 1
+      } else {
+      dist <- range.visual + lengths(gregexpr("\\+", extraInformation$message[range.visual])) 
+      dist.text <- length(strsplit(extraInformation$message[range.visual], "\\+")[[1]])
+      }
 
-      if (is.na(extraInformation$ssi)[range.visual]) { next }
+      # Visualize scores
       p <- p +
         ggplot2::annotate("rect",
                           xmin = extraInformation$primary.cutoff.pos[1],
-                          xmax = extraInformation$primary.cutoff.pos[1] + range.visual*range.value,
+                          xmax = extraInformation$primary.cutoff.pos[1] + (dist * range.value),
                           ymin = min.sec,
                           ymax = max.sec,
                           alpha = 0,
@@ -166,7 +175,7 @@ PlotDotSSI <- function(output.compensAID, og, primary, secondary, showScores = F
                           lwd = 0.5) +
         ggplot2::annotate("text",
                           label = ifelse(extraInformation$ssi[range.visual] == 0.00, 0, format(extraInformation$ssi[range.visual], nsmall = 2)),
-                          x = extraInformation$primary.cutoff.pos[1] + (range.visual*range.value) - (range.value/2),
+                          x = extraInformation$primary.cutoff.pos[1] + ((range.visual-1) * range.value) + (dist.text * range.value)/2,
                           y = max.sec + 0.25,
                           size = 2,
                           colour = "red",

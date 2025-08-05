@@ -4,7 +4,7 @@
 \alias{PlotDotSSI}
 \title{Plot dot plot of Secondary Stain Index scores}
 \usage{
-PlotDotSSI(output.compensAID, og, primary, secondary, showScores = FALSE)
+PlotDotSSI(output.compensAID, og, primary, secondary, showScores = TRUE)
 }
 \arguments{
 \item{output.compensAID}{(matrix): Matrix containing the SSI output.}

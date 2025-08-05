@@ -83,7 +83,8 @@ CompensAID <- function(ff, range.value = 4, events.value = 20, center.plot = 2, 
                              min = 10, max = 90,
                              si.input = si,
                              sd.input = separation.distance,
-                             co.input = co.renew)
+                             co.input = co.renew,
+                             cp.value = center.plot)
 
     # Update dataFrame
     co.renew <- pop.limit$co.dat

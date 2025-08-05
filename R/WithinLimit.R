@@ -9,6 +9,7 @@
 #' @param si.input (dataFrame): dataFrame containing SSI info.
 #' @param co.input (dataFrame) dataFrame with the output of the density-based cut-off detection.
 #' @param sd.input (numerical): Numerical value determining the distance between the primary negative and positive population.
+#' @param cp.value (numerical): Numerical value determining the preliminary center.
 #'
 #' @return (list) Returns a list with the adjusted cutoffs and update secondary stain index information dataFrame.
 #'
@@ -54,11 +55,12 @@
 #'                          max = 90,
 #'                          si.input = si,
 #'                          sd.input = separation.distance,
-#'                          co.input = co)
+#'                          co.input = co,
+#'                          cp.value = center.plot)
 #'
 #' @export
 
-WithinLimit <- function(population, og, primary, secondary, min = 10, max = 90, si.input, sd.input, co.input) {
+WithinLimit <- function(population, og, primary, secondary, min = 10, max = 90, si.input, sd.input, co.input, cp.value) {
 
 
   # Input validation -----------------------------------------------------------
@@ -71,6 +73,7 @@ WithinLimit <- function(population, og, primary, secondary, min = 10, max = 90, 
   checkmate::checkDataFrame(si.input)
   checkmate::checkNumeric(sd.input)
   checkmate::checkDataFrame(co.input)
+  checkmate::checkNumeric(cp.value)
 
 
   # Obtain percentages from secondary marker -----------------------------------
@@ -86,8 +89,15 @@ WithinLimit <- function(population, og, primary, secondary, min = 10, max = 90, 
 
     # Perform density-based cut-off detection
     co.adjust <- flowDensity::deGate(og, channel = cs, all.cuts = TRUE, tinypeak.removal = 0.0001, verbose = FALSE, upper = TRUE)
-    si.input$secondary.cutoff[si.input$primary.marker == primary & si.input$secondary.marker == secondary] <- GetClosestCenter(co.adjust, 2)
-    co.input$opt[co.input$channel == cs] <- GetClosestCenter(co.adjust, 2)
+    
+    # Assess if new cut-off improves gating
+    co.adjust <- GetClosestLimit(old.limit = co.input$opt[co.input$channel == cs], 
+                                 new.limit = GetClosestCenter(co.adjust, cp.value),
+                                 center.plot = cp.value)
+    
+    # Adjust values
+    si.input$secondary.cutoff[si.input$primary.marker == primary & si.input$secondary.marker == secondary] <- GetClosestCenter(co.adjust, cp.value)
+    co.input$opt[co.input$channel == cs] <- GetClosestCenter(co.adjust, cp.value)
 
     # Obtain populations with new cut-off
     pop <- GetPopulations(og = og,
@@ -99,8 +109,8 @@ WithinLimit <- function(population, og, primary, secondary, min = 10, max = 90, 
 
 
   # Obtain percentages from primary marker -----------------------------------
-  percentage.positive <- round((nrow(population[["primary.positive"]])*100)/nrow(og))
-  percentage.negative <- round((nrow(population[["primary.negative"]])*100)/nrow(og))
+  percentage.positive <- round((nrow(population[["primary.positive"]])*100)/nrow(population[["secondary.negative"]]))
+  percentage.negative <- round((nrow(population[["primary.negative"]])*100)/nrow(population[["secondary.negative"]]))
 
 
   # Adjust density-based cut-off detection parameters --------------------------
@@ -108,9 +118,17 @@ WithinLimit <- function(population, og, primary, secondary, min = 10, max = 90, 
 
     # Perform density-based cut-off detection
     co.adjust <- flowDensity::deGate(og, channel = cp, all.cuts = TRUE, tinypeak.removal = 0.0001, verbose = FALSE, upper = TRUE)
-    si.input$primary.cutoff.neg[si.input$primary.marker == primary & si.input$secondary.marker == secondary] <- GetClosestCenter(co.adjust, 2) - sd.input
-    si.input$primary.cutoff.pos[si.input$primary.marker == primary & si.input$secondary.marker == secondary] <- GetClosestCenter(co.adjust, 2) + sd.input
-    co.input$opt[co.input$channel == cp] <- GetClosestCenter(co.adjust, 2)
+    
+    # Asses
+    # Assess if new cut-off improves gating
+    co.adjust <- GetClosestLimit(old.limit = co.input$opt[co.input$channel == cp], 
+                                 new.limit = GetClosestCenter(co.adjust, cp.value),
+                                 center.plot = cp.value)
+    
+    # Adjust
+    si.input$primary.cutoff.neg[si.input$primary.marker == primary & si.input$secondary.marker == secondary] <- GetClosestCenter(co.adjust, cp.value) - sd.input
+    si.input$primary.cutoff.pos[si.input$primary.marker == primary & si.input$secondary.marker == secondary] <- GetClosestCenter(co.adjust, cp.value) + sd.input
+    co.input$opt[co.input$channel == cp] <- GetClosestCenter(co.adjust, cp.value)
 
     # Obtain populations with new cut-off
     pop <- GetPopulations(og = og,
