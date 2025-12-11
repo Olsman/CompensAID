@@ -1,15 +1,16 @@
 ---
 title: "CompensAID workflow"
-date: "`r BiocStyle::doc_date()`"
 author: "Rosan Olsman"
+date: "`r BiocStyle::doc_date()`"
 vignette: >
   %\VignetteIndexEntry{Overview_CompensAID}
   %\VignetteEngine{knitr::rmarkdown}
   %\VignetteEncoding{UTF-8}
 package: "CompensAID"
 output: 
-    BiocStyle::html_document:
-        toc: TRUE
+  BiocStyle::html_document:
+    toc: true
+    number_sections: true
 ---
 
 # Introduction
@@ -19,14 +20,29 @@ Next, the positive population is divided into equal segments, and for each segme
 This process allows for a more detailed assessment of marker combinations affected by reference errors. 
 
 # Installing CompensAID
-```{r Setup}
-devtools::install_github("https://github.com/Olsman/CompensAID")
-library(CompensAID)
+Not evaluated, run to install packages
+```{r eval=FALSE}
+# Install BiocManager if not already installed
+if (!requireNamespace("BiocManager", quietly = TRUE))
+    install.packages("BiocManager")
 
-# Additional packages
+# Install devtools if not already installed
+if (!requireNamespace("devtools", quietly = TRUE))
+    install.packages("devtools")
+
+# Install ggcyto development version from GitHub - otherwise does not work with ggplot2
+devtools::install_github("RGLab/ggcyto", ref = "devel")
+
+# Install CompensAID from GitHub
+devtools::install_github("Olsman/CompensAID")
+
+# Install ggplot2 from Bioconductor - older version otherwise it ggcyto gives errors
+devtools::install_version("ggplot2", version = "3.5.2", repos = "http://cran.us.r-project.org")
+
+# Load libraries
+library(ggplot2)
 library(ggcyto)
-library(flowCore)
-library(PeacoQC)
+library(CompensAID)
 ```
 
 # Pre-processing
@@ -36,7 +52,7 @@ The CompensAID package operates on pre-processed FlowFrame objects to evaluate t
 3. Logicle transformation
 4. Quality control using PeacoQC
 Note: Doublets and debris are not removed in this pipeline. In this example, scatter channels are excluded entirely from the FCS file.
-```{r Preprocessing}
+```{r eval=FALSE}
 # Read flowFrame
 file <- flowCore::read.FCS(system.file("extdata", "raw.68983.fcs", package = "CompensAID"))
 
@@ -71,35 +87,6 @@ The data file is processed as shown above
 # Pre-processed data 
 file <- flowCore::read.FCS(system.file("extdata", "68983.fcs", package = "CompensAID"))
 ```
-
-# Visualize pre-processed data
-Manual inspection of data; check if preprocessing was ok. 
-```{r Visualize}
-set.seed(2025)
-plot1 <- ggcyto::autoplot(file, 
-                 x = "Pacific Blue-A",
-                 y = "APC-Cy7-A",
-                 bins = 100) +
-  ggplot2::theme_minimal()
-print(plot1)
-
-set.seed(2025)
-plot2 <- ggcyto::autoplot(file, 
-                 x = "FITC-A",
-                 y = "PE-Cy5-A",
-                 bins = 100) +
-  ggplot2::theme_minimal()
-print(plot2)
-
-set.seed(2025)
-plot3 <- ggcyto::autoplot(file, 
-                 x = "PE-A",
-                 y = "PE-Texas Red-A",
-                 bins = 100) +
-  ggplot2::theme_minimal()
-print(plot3)
-```
-
 
 # CompensAID: run tool
 The CompensAID tool is used here with its default parameter settings. A segment.value of four, which defines the number of segments within the positive population, was found to be suitable for both conventional and spectral flow cytometry data.
