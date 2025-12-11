@@ -21,3 +21,6 @@
 * Removed unevaluated chungs in vignette
 * Adjusted all %>% to |>
 * Added testthat
+
+# CompensAID 0.99.4
+* Adjusted vignette

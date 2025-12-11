@@ -19,9 +19,14 @@ Next, the positive population is divided into equal segments, and for each segme
 This process allows for a more detailed assessment of marker combinations affected by reference errors. 
 
 # Installing CompensAID
-```{r setup, eval = FALSE}
+```{r Setup}
 devtools::install_github("https://github.com/Olsman/CompensAID")
 library(CompensAID)
+
+# Additional packages
+library(ggcyto)
+library(flowCore)
+library(PeacoQC)
 ```
 
 # Pre-processing
@@ -31,7 +36,7 @@ The CompensAID package operates on pre-processed FlowFrame objects to evaluate t
 3. Logicle transformation
 4. Quality control using PeacoQC
 Note: Doublets and debris are not removed in this pipeline. In this example, scatter channels are excluded entirely from the FCS file.
-```{r pre-processing, eval = FALSE}
+```{r Preprocessing}
 # Read flowFrame
 file <- flowCore::read.FCS(system.file("extdata", "raw.68983.fcs", package = "CompensAID"))
 
@@ -62,34 +67,37 @@ file <- file[, names(flowCore::markernames(file))]
 
 # Final data
 The data file is processed as shown above
-```{r}
+```{r Clean}
 # Pre-processed data 
 file <- flowCore::read.FCS(system.file("extdata", "68983.fcs", package = "CompensAID"))
 ```
 
 # Visualize pre-processed data
 Manual inspection of data; check if preprocessing was ok. 
-```{r center.plot, eval = FALSE}
+```{r Visualize}
 set.seed(2025)
-ggcyto::autoplot(file, 
+plot1 <- ggcyto::autoplot(file, 
                  x = "Pacific Blue-A",
                  y = "APC-Cy7-A",
                  bins = 100) +
   ggplot2::theme_minimal()
+print(plot1)
 
 set.seed(2025)
-ggcyto::autoplot(file, 
+plot2 <- ggcyto::autoplot(file, 
                  x = "FITC-A",
                  y = "PE-Cy5-A",
                  bins = 100) +
   ggplot2::theme_minimal()
+print(plot2)
 
 set.seed(2025)
-ggcyto::autoplot(file, 
+plot3 <- ggcyto::autoplot(file, 
                  x = "PE-A",
                  y = "PE-Texas Red-A",
                  bins = 100) +
   ggplot2::theme_minimal()
+print(plot3)
 ```
 
 
@@ -103,14 +111,14 @@ res.compensaid <- CompensAID::CompensAID(ff = file)
 
 # Secondary Stain Index Matrix
 Visualize the output of the CompensAID tool.
-```{r matrix, fig.width=5, fig.height=5}
+```{r Matrix, fig.width=5, fig.height=5}
 matrix <- CompensAID::PlotMatrix(output = res.compensaid)
 print(matrix)
 ```
 
 # Identify flagged marker combinations 
 Obtain marker combinations with a Secondary Stain Index < -1.
-```{r identification}
+```{r Identification}
 # Check SSI < -1
 index <- which(res.compensaid[["matrix"]] < -1, arr.ind = TRUE)
 
@@ -124,7 +132,7 @@ combination <- data.frame(primary.channel = rownames(res.compensaid[["matrix"]])
 
 # Dot plots
 Visualize the flagged marker combinations.
-```{r dotplot, fig.width=5, fig.height=5}
+```{r Dotplot, fig.width=5, fig.height=5}
 # Visualize dot plot with SSI scores
 dotPlot <- CompensAID::PlotDotSSI(output = res.compensaid,
                                   og = file,
@@ -135,6 +143,6 @@ print(dotPlot)
 ```
 
 # Session info
-```{r session-info}
+```{r SessionInfo}
 sessionInfo()
 ```
