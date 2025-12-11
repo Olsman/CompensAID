@@ -1,27 +1,22 @@
 ---
-title: "CompensAID"
-output: rmarkdown::html_vignette
+title: "CompensAID workflow"
+date: "`r BiocStyle::doc_date()`"
+author: "Rosan Olsman"
 vignette: >
-  %\VignetteIndexEntry{CompensAID}
-  %\VignetteEncoding{UTF-8}
+  %\VignetteIndexEntry{Overview_CompensAID}
   %\VignetteEngine{knitr::rmarkdown}
-editor_options: 
-  chunk_output_type: inline
+  %\VignetteEncoding{UTF-8}
+package: "CompensAID"
+output: 
+    BiocStyle::html_document:
+        toc: TRUE
 ---
 
-```{r, include = FALSE}
-knitr::opts_chunk$set(
-  collapse = TRUE,
-  comment = "#>"
-)
-```
-
-
 # Introduction
-The CompensAID package provides quality control for evaluating compensation or unmixing accuracy in flow cytometry data. It requires pre-processed Flow Cytometry Standard (FCS) files as input.
-The tool automatically calculates the standard deviation (SD) and mean fluorescence intensity (MFI) in the secondary channel for both the negative and positive populations defined in the primary channel.
+The CompensAID package provides quality control for evaluating the potential presence of reference errors in flow cytometry data. It requires pre-processed Flow Cytometry Standard (FCS) files as input.
+The tool automatically calculates the standard deviation (SD) and median fluorescence intensity (MFI) in the secondary channel for both the negative and positive populations defined in the primary channel.
 Next, the positive population is divided into equal segments, and for each segment, the Secondary Stain Index (SSI) is computed. 
-This process allows for a more detailed and automated assessment of marker combinations that may be impacted by compensation/unmixing errors.
+This process allows for a more detailed assessment of marker combinations affected by reference errors. 
 
 # Installing CompensAID
 ```{r setup, eval = FALSE}
@@ -30,12 +25,12 @@ library(CompensAID)
 ```
 
 # Pre-processing
-The CompensAID package operates on pre-processed FlowFrame objects to evaluate compensation or unmixing accuracy. Below is an example pipeline for preparing your data:
+The CompensAID package operates on pre-processed FlowFrame objects to evaluate the presence of reference errors. Below is an example pipeline for preparing your data:
 1. Removal of margin events (conventional FCS files)
 2. Compensation (conventional FCS files)
 3. Logicle transformation
 4. Quality control using PeacoQC
-Note: Doublets and debris are not removed in this pipeline, as CompensAID focuses exclusively on marker channels. In this example, scatter channels are excluded entirely from the FCS file.
+Note: Doublets and debris are not removed in this pipeline. In this example, scatter channels are excluded entirely from the FCS file.
 ```{r pre-processing, eval = FALSE}
 # Read flowFrame
 file <- flowCore::read.FCS(system.file("extdata", "raw.68983.fcs", package = "CompensAID"))
@@ -73,13 +68,8 @@ file <- flowCore::read.FCS(system.file("extdata", "68983.fcs", package = "Compen
 ```
 
 # Visualize pre-processed data
-Before using the CompensAID tool, a manual inspection of several marker combinations in the FCS file is required.
-The center.plot parameter (default = 2) influences where the chosed cut-off between the negative and positive populations, based on density. This parameter should be adjusted according to the output range after data transformation:
-- If the transformed data range falls within 0 to 4, the default value of 2 is recommended.
-- If the range is falls within e.g., -1 to 3 or 0 to 3, consider lowering center.plot to 1.5 for better performance.
-With the center.plot parameter, the tools aims to select the density-based cut-off detection that best seperates the populations. 
+Manual inspection of data; check if preprocessing was ok. 
 ```{r center.plot, eval = FALSE}
-# Transformation range: 0-4
 set.seed(2025)
 ggcyto::autoplot(file, 
                  x = "Pacific Blue-A",
@@ -87,7 +77,6 @@ ggcyto::autoplot(file,
                  bins = 100) +
   ggplot2::theme_minimal()
 
-# Transformation range (-1-2 (x-axis) and 0-4 (y-axis)) -> therefore, transformation range: 0-4
 set.seed(2025)
 ggcyto::autoplot(file, 
                  x = "FITC-A",
@@ -95,34 +84,27 @@ ggcyto::autoplot(file,
                  bins = 100) +
   ggplot2::theme_minimal()
 
-# Transformation range: 0-4
 set.seed(2025)
 ggcyto::autoplot(file, 
-                 x = "PE-Texas Red-A",
-                 y = "PE-A",
+                 x = "PE-A",
+                 y = "PE-Texas Red-A",
                  bins = 100) +
   ggplot2::theme_minimal()
 ```
 
 
 # CompensAID: run tool
-The CompensAID tool is used here with its default parameter settings. A range.value of four, which defines the number of segments within the positive population, was found to be suitable for both conventional and spectral flow cytometry data.
-The minimum number of events per segment is set to 20 by default. If you observe segments with very negative Secondary Stain Index (SSI) values and few events, consider increasing this threshold to improve reliability.
-The center.plot value was chosen by visually inspecting a few representative dot plots. This parameter helps define the approximate cut-off for density-based population separation.
-The default separation distance is set to 0.25, which works well for transformation ranges between 0 and 4. For narrower transformation ranges (e.g., 0 to 3), try reducing the separation distance to 0.15 or 0.10 to improve sensitivity.
+The CompensAID tool is used here with its default parameter settings. A segment.value of four, which defines the number of segments within the positive population, was found to be suitable for both conventional and spectral flow cytometry data.
+The minimum number of events per segment is set to 50 by default. If you observe segments with very negative Secondary Stain Index (SSI) values and few events, this could indicate a false-positive finding by the tool
 ```{r CompensAID}
 # CompensAID
-res.compensaid <- CompensAID::CompensAID(ff = file, 
-                                         range.value = 4,
-                                         events.value = 20,
-                                         center.plot = 2,
-                                         separation.distance = 0.25)
+res.compensaid <- CompensAID::CompensAID(ff = file)
 ```
 
 # Secondary Stain Index Matrix
 Visualize the output of the CompensAID tool.
 ```{r matrix, fig.width=5, fig.height=5}
-matrix <- CompensAID::PlotMatrix(res.compensaid)
+matrix <- CompensAID::PlotMatrix(output = res.compensaid)
 print(matrix)
 ```
 
@@ -135,7 +117,7 @@ index <- which(res.compensaid[["matrix"]] < -1, arr.ind = TRUE)
 # Obtain marker names
 library(dplyr)
 combination <- data.frame(primary.channel = rownames(res.compensaid[["matrix"]])[index[, "col"]],
-                          secondary.channel = rownames(res.compensaid[["matrix"]])[index[, "row"]]) %>%
+                          secondary.channel = rownames(res.compensaid[["matrix"]])[index[, "row"]]) |>
   dplyr::mutate(primary.marker = flowCore::markernames(file)[primary.channel],
                 secondary.marker = flowCore::markernames(file)[secondary.channel])
 ```
@@ -144,7 +126,7 @@ combination <- data.frame(primary.channel = rownames(res.compensaid[["matrix"]])
 Visualize the flagged marker combinations.
 ```{r dotplot, fig.width=5, fig.height=5}
 # Visualize dot plot with SSI scores
-dotPlot <- CompensAID::PlotDotSSI(output.compensAID = res.compensaid,
+dotPlot <- CompensAID::PlotDotSSI(output = res.compensaid,
                                   og = file,
                                   primary = combination$primary.marker[1],
                                   secondary = combination$secondary.marker[1],

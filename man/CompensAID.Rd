@@ -2,46 +2,28 @@
 % Please edit documentation in R/CompensAID.R
 \name{CompensAID}
 \alias{CompensAID}
-\title{Run CompensAID tool; automated detection of compensation issues}
+\title{CompensAID}
 \usage{
-CompensAID(
-  ff,
-  range.value = 4,
-  events.value = 20,
-  center.plot = 2,
-  separation.distance = 0.25
-)
+CompensAID(ff, segment.value = 4, events.value = 50)
 }
 \arguments{
 \item{ff}{(FlowFrame): FlowFrame containing the expression matrix, channel names, and marker names.}
 
-\item{range.value}{(numerical): Numerical value of the number of segments in the primary positive population.}
+\item{segment.value}{(numerical): Numerical value of the number of segments in the primary positive population.}
 
 \item{events.value}{(numerical): Numerical value of the minimum number of events per population/segment.}
-
-\item{center.plot}{(numerical): Numerical value determining the preliminary center.}
-
-\item{separation.distance}{(numerical): Numerical value determining the distance between the primary negative and positive population.}
 }
 \value{
 (list) Returns a list containing the full SSI output and SSI matrix
 }
 \description{
-Run CompensAID tool; automated detection of compensation issues
+Run CompensAID to assess the potential presence of reference errors within the FCS file. The outcome is a list which contains an SSI matrix. The matrix quickly visualizes the marker combinations for each marker combinations. Additional information regarding the number of events per segments, which segments were merged, and the corresponding SSI values can be found in the Info dataframe.
 }
 \examples{
 # Import FCS file
 file <- flowCore::read.FCS(system.file("extdata", "68983.fcs", package = "CompensAID"))
 
-# Run compensAID tool
-segments <- 4
-min.events <- 20
-center <- 2
-distance.populations <- 0.25
-compensAID.res <- CompensAID(ff = file,
-                             range.value = segments,
-                             events.value = min.events,
-                             center.plot = center,
-                             separation.distance = distance.populations)
+# Run CompensAID tool
+compensAID.res <- CompensAID(ff = file)
 
 }

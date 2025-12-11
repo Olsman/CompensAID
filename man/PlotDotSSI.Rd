@@ -4,50 +4,43 @@
 \alias{PlotDotSSI}
 \title{Plot dot plot of Secondary Stain Index scores}
 \usage{
-PlotDotSSI(output.compensAID, og, primary, secondary, showScores = TRUE)
+PlotDotSSI(output, og, primary, secondary, showScores = TRUE)
 }
 \arguments{
-\item{output.compensAID}{(matrix): Matrix containing the SSI output.}
+\item{output}{(matrix): Matrix containing the SSI output from the CompensAID tool.}
 
 \item{og}{(flowFrame): FlowFrame containing the expression matrix, channel names, and marker names.}
 
-\item{primary}{(character): Minimum SSI value shown in matrix.}
+\item{primary}{(character): Primary marker (x-axis)}
 
-\item{secondary}{(character): Maximum SSI value shown in matrix.}
+\item{secondary}{(character): Seconday marker (y-axis)}
 
 \item{showScores}{(boolean): Boolean variable determining if scores and gating should be visualized.}
 }
 \value{
-(ggplot2) Returns figure containing a dot plot of the compensAID output.
+(ggplot2) Returns figure containing a dot plot of the CompensAID output.
 }
 \description{
-Plot dot plot of Secondary Stain Index scores
+This function plots the marker combinations of interest. Additionally, the gating, segmentation, and SSI values can be visualized by setting showScore to TRUE.
 }
 \examples{
 # Import FCS file
 file <- flowCore::read.FCS(system.file("extdata", "68983.fcs", package = "CompensAID"))
 
 # Run compensAID tool
-segments <- 4
-min.events <- 20
-center <- 2
-distance.populations <- 0.25
-compensAID.res <- CompensAID(ff = file,
-                             range.value = segments,
-                             events.value = min.events,
-                             center.plot = center,
-                             separation.distance = distance.populations)
+compensAID.res <- CompensAID(ff = file)
 
 # Marker names
 primary.marker <- "CD19"
 secondary.marker <- "CD3"
 
 # Plot matrix
-figure <- PlotDotSSI(output.compensAID = compensAID.res,
+figure <- PlotDotSSI(output = compensAID.res,
                      og = file,
                      primary = primary.marker,
                      secondary = secondary.marker,
                      showScores = TRUE)
+plot(figure)
 
 }
 \seealso{

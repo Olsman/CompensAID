@@ -4,34 +4,27 @@
 \alias{PlotMatrix}
 \title{Plot Secondary Stain Index matrix}
 \usage{
-PlotMatrix(output.compensAID)
+PlotMatrix(output)
 }
 \arguments{
-\item{output.compensAID}{(matrix): Matrix containing the SSI output.}
+\item{output}{(matrix): Matrix containing the SSI output.}
 }
 \value{
 (ggplot2) Returns figure containing a matrix of the total compensAID output.
 }
 \description{
-Plot Secondary Stain Index matrix
+This function plot the SSI matrix, quickly allowing the identification of potential reference errors if a SSI < -1 is obtained.
 }
 \examples{
 # Import FCS file
 file <- flowCore::read.FCS(system.file("extdata", "68983.fcs", package = "CompensAID"))
 
 # Run compensAID tool
-segments <- 4
-min.events <- 20
-center <- 2
-distance.populations <- 0.25
-compensAID.res <- CompensAID(ff = file,
-                             range.value = segments,
-                             events.value = min.events,
-                             center.plot = center,
-                             separation.distance = distance.populations)
+compensAID.res <- CompensAID(ff = file)
 
 # Plot matrix
-figure <- PlotMatrix(output.compensAID = compensAID.res)
+figure <- PlotMatrix(output = compensAID.res)
+plot(figure)
 
 }
 \seealso{

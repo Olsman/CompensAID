@@ -14,7 +14,7 @@ utils::globalVariables(globalVariables(c("file", "primary.marker", "primary.chan
                                        "ff", "range.value", "mc", "co", "separation.distance", ".")))
 
 # PlotMatrix/PlotDotSSI
-utils::globalVariables(globalVariables(c("p", "value", "Var1", "Var2", "value2", "color")))
+utils::globalVariables(globalVariables(c("p", "value", "Var1", "Var2", "value2", "color", "alpha.val")))
 
 # CleanMatrix
 utils::globalVariables(globalVariables(c("mergeGroup", "segment.min.merged", "segment.max.merged")))
