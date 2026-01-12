@@ -27,3 +27,6 @@
 
 # CompensAID 0.99.5
 * Adjusted vignette - update BiocManager, ggcyto, and ggplot2
+
+# CompensAID 0.99.6
+* Bumped version - compatibility ggcyto and ggplot2 ≥ 4.0

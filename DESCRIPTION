@@ -1,7 +1,7 @@
 Package: CompensAID
 Type: Package
 Title: Automated detection tool for spillover errors
-Version: 0.99.5
+Version: 0.99.6
 Authors@R: c(person("Rosan", "Olsman", 
                     role = c("aut", "cre"),
                     email = "r.olsman@erasmusmc.nl",
